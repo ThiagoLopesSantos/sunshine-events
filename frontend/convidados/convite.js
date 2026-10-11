@@ -6,7 +6,7 @@ let convidadoAtual = null;
 const urlParams = new URLSearchParams(window.location.search);
 const adminIdEvento = urlParams.get('evento') || 1; // Padrão 1 caso venha sem parâmetro
 
-// Função para buscar e exibir o nome do evento no topo da página
+// Função para buscar e exibir o nome do evento e verificar o prazo de RSVP
 async function carregarInfoEvento() {
     try {
         const resposta = await fetch(`${API_URL}/rsvp/evento-info/${adminIdEvento}`);
@@ -14,6 +14,26 @@ async function carregarInfoEvento() {
         
         if (resposta.ok && dados.status === 'sucesso') {
             document.getElementById('tituloNomeEvento').innerText = `Casamento de ${dados.nome_evento}`;
+            
+            // --- NOVA REGRA: VALIDAÇÃO DE PRAZO DO EVENTO ---
+            if (dados.data_evento) {
+                const hoje = new Date();
+                hoje.setHours(0, 0, 0, 0); // Zera as horas para comparar apenas os dias
+                
+                const dataEvento = new Date(`${dados.data_evento}T00:00:00`);
+                
+                // Se a data de hoje for maior que a data do evento, o prazo acabou!
+                if (hoje > dataEvento) {
+                    const formBusca = document.getElementById('formBusca');
+                    if (formBusca) {
+                        formBusca.innerHTML = `
+                            <div style="background-color: #ffeaa7; padding: 15px; border-radius: 8px; color: #d63031; text-align: center; font-weight: bold;">
+                                ⏳ O prazo para confirmação de presença neste evento já foi encerrado. Agradecemos o carinho!
+                            </div>
+                        `;
+                    }
+                }
+            }
         } else {
             document.getElementById('tituloNomeEvento').innerText = `Portal de Convidados`;
         }

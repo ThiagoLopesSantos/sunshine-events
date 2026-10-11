@@ -7,9 +7,9 @@ Markdown
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue?style=flat-square&logo=python)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-009688?style=flat-square&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![SQLite](https://img.shields.io/badge/SQLite-Database-003B57?style=flat-square&logo=sqlite)](https://www.sqlite.org/)
-[![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-success?style=flat-square)]()
+[![Status](https://img.shields.io/badge/Status-Pronto%20para%20Deploy-success?style=flat-square)]()
 
-*Uma solução moderna, modular e de alta performance para gerenciar listas de presença, convidados e acompanhantes com isolamento total de dados entre eventos.*
+*Uma solução moderna, modular e de alta performance para gerenciar listas de presença, convidados e acompanhantes com isolamento total de dados entre eventos e validações estritas de segurança.*
 
 ---
 
@@ -17,70 +17,56 @@ Markdown
 
 ## 📖 Sobre o Projeto
 
-O **Sunshine Events - RSVP** nasceu com o propósito de transformar a experiência de organização e confirmação de presença em eventos (com foco inicial em casamentos). O projeto foi construído do absoluto zero com um forte rigor de engenharia de software, priorizando:
-* **Arquitetura Limpa:** Separação estrita de responsabilidades entre backend modular e frontend com arquivos dedicados (zero CSS inline).
-* **Segurança de Nível Comercial:** Autenticação via JWT, criptografia robusta de senhas com Bcrypt e isolamento multi-tenant (`multi-tenancy`) para múltiplos administradores.
-* **Experiência do Usuário (UX):** Interfaces limpas com design *Glassmorphism/Clean*, tipografia sofisticada (*Playfair Display* & *Montserrat*) e links personalizados para disparos via WhatsApp.
+O **Sunshine Events - RSVP** foi desenvolvido do absoluto zero com um rigoroso padrão de engenharia de software para atender organizadores de eventos e casais. O sistema prioriza:
+* **Arquitetura Limpa e Modular:** Separação estrita entre o backend (`backend/`) e o frontend (`frontend/`), organizado em subpastas dedicadas para o painel do administrador (`admin/`) e o portal do convidado (`convidado/`).
+* **Segurança de Nível Comercial:** Autenticação via JWT com chave protegida por variáveis de ambiente (`os.getenv`), criptografia de senhas com Bcrypt e isolamento multi-tenant (`admin_id`).
+* **Validação Rigorosa de Dados:** Limpeza automática e padronização de telefones brasileiros (10 ou 11 dígitos) e travamento automático de prazos de RSVP com base na data do evento.
 
 ---
 
-## 🛠️ Arquitetura e Tecnologias
+## 🛠️ Estrutura do Projeto
 
-O sistema é dividido em uma API robusta em Python e um frontend moderno baseado em páginas estáticas estruturadas:
+```text
+sistema-rsvp/
+├── backend/
+│   ├── main.py
+│   ├── database.py
+│   ├── auth.py
+│   ├── schemas.py
+│   └── routers/
+│       ├── admin.py
+│       └── convidados.py
+├── frontend/
+│   ├── index.html / index.js / index.css (Login/Cadastro Admin)
+│   ├── admin/ (dashboard.html, script.js, style.css)
+│   └── convidados/ (convite.html, convite.js, convite.css)
+├── casamento.db
+└── readme.md
+✨ Funcionalidades Principais
+🔐 Painel Administrativo Seguro: Cadastro, login e recuperação de senha validados.
 
-* **Backend:** [FastAPI](https://fastapi.tiangolo.com/) estruturado em rotas modulares (`admin.py`, `convidados.py`) com validação estrita de dados via **Pydantic**.
-* **Banco de Dados:** [SQLite](https://www.sqlite.org/) otimizado com gerenciadores de contexto (`contextmanager`) e índices únicos compostos para evitar conflitos de dados.
-* **Segurança:** Autenticação baseada em tokens **JWT (JSON Web Tokens)** e hash de senhas com **Bcrypt**.
-* **Frontend:** HTML5, CSS3 modular (um arquivo por página: `index.css`, `style.css`, `convite.css`) e JavaScript puro (ES6+).
-* **Exportação:** Integração com **SheetJS (xlsx)** para download de relatórios gerenciais diretamente em planilhas do Excel.
+👥 Isolamento Multi-Tenant: Cada administrador gerencia sua própria base de convidados sem conflitos de números de telefone.
 
----
+📱 Portal Dinâmico do Convidado: Acesso via link personalizado por evento (convite.html?evento=ID), busca por celular e controle inteligente de acompanhantes (com isenção para menores de 7 anos).
 
-## ✨ Funcionalidades Principais
+⏳ Trava de Prazo de RSVP: Bloqueio automático de confirmações caso a data limite do evento já tenha sido ultrapassada.
 
-* 🔐 **Painel Administrativo Seguro:** Cadastro, login e redefinição de senha com validações rigorosas de e-mail duplicado e força de senha.
-* 👥 **Isolamento de Dados (Multi-Tenancy):** Cada administrador possui sua própria base de convidados isolada por `admin_id`. O mesmo número de telefone pode ser cadastrado em eventos diferentes sem gerar conflitos no banco de dados.
-* 📱 **Portal do Convidado Personalizado:** O convidado acessa o link exclusivo do evento (ex: `convite.html?evento=ID`), visualiza o nome do casamento em destaque, busca pelo celular e gerencia sua confirmação e acompanhantes.
-* 👶 **Controle Inteligente de Acompanhantes:** Definição de limites por convidado e regras customizadas (como isenção de contagem para crianças menores de 7 anos).
-* 📲 **Disparos Rápidos via WhatsApp:** Geração automática de links de convite e lembretes amigáveis direto na tabela de gerenciamento da dashboard.
-* 📊 **Exportação Executiva:** Geração de lista sequencial limpa em formato `.xlsx` focada na portaria do evento.
+📲 Disparos Rápidos via WhatsApp: Geração de links automáticos para convites e lembretes direto na dashboard.
 
----
+📊 Exportação Executiva: Download de relatórios limpos em formato Excel (.xlsx).
 
-## 🚀 Como Executar o Projeto Localmente
-
-Siga os passos abaixo para rodar o ambiente de desenvolvimento na sua máquina:
-
-### 1. Clonar e Acessar o Repositório
-```bash
+🚀 Como Executar Localmente
+1. Clonar o Repositório e Iniciar o Backend
+Bash
 git clone <url-do-seu-repositorio>
 cd sistema-rsvp
-2. Configurar o Backend (FastAPI)
-Recomenda-se o uso de um ambiente virtual Python:
 
-Bash
-# Criar e ativar o ambiente virtual
+# Criar e ativar o ambiente virtual (Recomendado)
 python -m venv venv
-# No Windows:
 venv\Scripts\activate
 
-# Instalar as dependências necessárias
+# Instalar dependências
 pip install fastapi uvicorn pydantic bcrypt python-jose python-multipart
-3. Iniciar o Servidor da API
-Bash
-uvicorn main:app --reload
-A API estará rodando em http://127.0.0.1:8000 (com documentação interativa em /docs).
 
-4. Executar o Frontend
-Abra os arquivos HTML localmente (por exemplo, utilizando a extensão Live Server do VS Code) a partir da pasta frontend/.
-
-📜 Histórico de Desenvolvimento
-O projeto evoluiu de um script básico monolítico para uma aplicação SaaS corporativa através de uma série de iterações estruturadas:
-
-MVP Funcional: Criação das rotas iniciais em FastAPI e banco SQLite global.
-
-Refinamento de UX: Adição de feedback visual temporizado no portal do convidado e validações frontend de segurança.
-
-Modularização de Estilos: Separação completa do CSS por página para garantir escalabilidade e limpeza de código.
-
-Arquitetura Multi-Tenant: Implementação de chaves compostas no banco (admin_id + celular), rotas protegidas por JWT e links dinâmicos por evento com integração nativa ao WhatsApp.
+# Iniciar o servidor da API FastAPI
+uvicorn backend.main:app --reload

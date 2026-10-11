@@ -8,7 +8,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from .database import obter_conexao
 
 # Configurações de Segurança
-SECRET_KEY = "sua_chave_secreta_super_segura_aqui_mude_depois"
+SECRET_KEY = os.getenv("SECRET_KEY", "sua_chave_secreta_super_segura_aqui_mude_depois")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 

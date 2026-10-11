@@ -1,3 +1,4 @@
+import re
 import sqlite3
 import json
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -6,6 +7,11 @@ from ..schemas import AdminSchema, LoginSchema, ConvidadosSchema, EditarConvidad
 from ..auth import hash_senha, verificar_senha, criar_token_acesso, obter_admin_atual
 
 router = APIRouter(prefix="/admin", tags=["Administrador"])
+
+# ==================== FUNÇÃO AUXILIAR ====================
+# Limpa o telefone para manter apenas os números (remove parênteses, traços e espaços)
+def limpar_celular(celular: str) -> str:
+    return re.sub(r'\D', '', celular)
 
 @router.post("/cadastrar")
 def cadastrar_admin(admin: AdminSchema):
@@ -76,6 +82,12 @@ def login_admin(credenciais: LoginSchema):
 @router.post("/convidados/cadastrar")
 def cadastrar_convidado(convidado: ConvidadosSchema, admin_logado: dict = Depends(obter_admin_atual)):
     try:
+        # Remove qualquer caractere que não seja número do celular digitado
+        celular_limpo = limpar_celular(convidado.celular)
+
+        if len(celular_limpo) != 11 and len(celular_limpo) != 10:
+            return {"status": "erro", "mensagem": "O número de celular deve conter DDD e número."}
+        
         with obter_conexao() as conexao:
             cursor = conexao.cursor()
             

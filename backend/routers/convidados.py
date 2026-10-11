@@ -8,6 +8,8 @@ router = APIRouter(prefix="/rsvp", tags=["Portal do Convidado"])
 def obter_info_evento(admin_id: int):
     with obter_conexao() as conexao:
         cursor = conexao.cursor()
+
+        # Aqui buscamos no banco de dados o nome_evento E a data_evento do administrador
         cursor.execute("SELECT nome_evento, data_evento FROM administradores WHERE id = ?", (admin_id,))
         resultado = cursor.fetchone()
         
