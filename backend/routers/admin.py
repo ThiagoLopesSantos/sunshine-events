@@ -1,9 +1,9 @@
 import sqlite3
 import json
 from fastapi import APIRouter, Depends, HTTPException, status
-from database import obter_conexao
-from schemas import AdminSchema, LoginSchema, ConvidadosSchema, EditarConvidadoSchema, EditarAdminSchema
-from auth import hash_senha, verificar_senha, criar_token_acesso, obter_admin_atual
+from ..database import obter_conexao
+from ..schemas import AdminSchema, LoginSchema, ConvidadosSchema, EditarConvidadoSchema, EditarAdminSchema
+from ..auth import hash_senha, verificar_senha, criar_token_acesso, obter_admin_atual
 
 router = APIRouter(prefix="/admin", tags=["Administrador"])
 

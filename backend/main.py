@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from database import criar_tabelas
-from routers import admin, convidados
+from .database import criar_tabelas
+from .routers import admin, convidados
 
 # Cria as tabelas ao iniciar a aplicação
 

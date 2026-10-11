@@ -1,7 +1,9 @@
-from contextlib import contextmanager
+import os
 import sqlite3
+from contextlib import contextmanager
 
-DATABASE_NAME = "casamento.db"
+# Sobe um nível da pasta backend/ para salvar na raiz do projeto
+DATABASE_NAME = os.path.join(os.path.dirname(os.path.dirname(__file__)), "casamento.db")
 
 @contextmanager
 def obter_conexao():

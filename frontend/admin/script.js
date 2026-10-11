@@ -290,7 +290,7 @@ function limparErroModal() {
 
 function sair() {
     localStorage.removeItem('meu_token_rsvp');
-    window.location.href = 'index.html';
+    window.location.href = '../index.html';
 }
 
 carregarConvidados();
@@ -360,7 +360,7 @@ document.getElementById('formPerfil').addEventListener('submit', async function(
 window.addEventListener('DOMContentLoaded', () => {
     const adminId = localStorage.getItem('admin_id') || 1;
     // Pega a URL atual do site e aponta para a pasta de convidados
-    const baseUrl = window.location.href.replace('dashboard.html', 'convidados/convite.html');
+    const baseUrl = window.location.href.replace('admin/dashboard.html', 'convidados/convite.html');
     const linkFinal = `${baseUrl}?evento=${adminId}`;
     
     const elementoLink = document.getElementById('linkConviteTexto');

@@ -5,7 +5,7 @@ from typing import Optional
 from jose import JWTError, jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from database import obter_conexao
+from .database import obter_conexao
 
 # Configurações de Segurança
 SECRET_KEY = "sua_chave_secreta_super_segura_aqui_mude_depois"

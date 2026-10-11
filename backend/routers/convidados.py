@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from database import obter_conexao
-from schemas import ConfirmarRsvpSchema
+from ..database import obter_conexao
+from ..schemas import ConfirmarRsvpSchema
 
 router = APIRouter(prefix="/rsvp", tags=["Portal do Convidado"])
 

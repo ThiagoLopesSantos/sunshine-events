@@ -49,10 +49,10 @@ document.getElementById('formLogin').addEventListener('submit', async function(e
 
         if (resposta.ok && dados.access_token) {
             localStorage.setItem('meu_token_rsvp', dados.access_token);
-            localStorage.setItem('admin_id', dados.admin_id)
+            localStorage.setItem('admin_id', dados.admin_id),
             localStorage.setItem('nome_evento', dados.nome_evento);
             localStorage.setItem('data_evento', dados.data_evento);
-            window.location.href = 'dashboard.html';
+            window.location.href = 'admin/dashboard.html';
         } else {
             msgBox.innerText = dados.detail || dados.mensagem || "E-mail ou senha incorretos.";
         }
