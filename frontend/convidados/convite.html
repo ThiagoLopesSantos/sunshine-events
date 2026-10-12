@@ -28,12 +28,12 @@
             
             <form id="formBusca">
                 <div class="form-group">
-                    <label>Celular (Ex: 21999999999):</label>
+                    <label>Celular (Ex: (DDD)+ 9 9999-9999):</label>
                     <input type="text" id="celularBusca" placeholder="Somente números com DDD" required>
                 </div>
                 <button type="submit" class="btn-primary .btn-acao">Acessar Convite</button>
             </form>
-            <p id="msgErroBusca" style="color: #ff4757; font-size: 14px; text-align: center; margin-top: 15px; font-weight: bold;"></p>
+            <p id="msgErroBusca"></p>
         </div>
 
         <!-- ETAPA 2: DADOS E CONFIRMAÇÃO -->
@@ -41,16 +41,16 @@
             <h2>Olá, <span id="spanNome"></span>!</h2>
             <p>É uma alegria ter você conosco neste momento especial. Por favor, confirme sua presença abaixo.</p>
             
-            <div style="background: #f1f2f6; padding: 12px; border-radius: 6px; margin-bottom: 20px; font-size: 14px; text-align: center;">
+            <div class="limiteAcompanhante">
                 <strong>Seu limite de acompanhantes:</strong> <span id="spanLimite">0</span> pessoa(s)
             </div>
 
             <form id="formConfirmacao">
                 <!-- SEÇÃO DE ACOMPANHANTES -->
                 <div id="secaoAcompanhantes" class="escondido">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <label style="margin: 0; font-weight: bold;">Seus Acompanhantes:</label>
-                        <button type="button" id="btnAdicionarAcomp" onclick="adicionarCampoAcompanhante()" style="width: auto; padding: 6px 12px; font-size: 12px; background-color: #1e90ff;">+ Adicionar</button>
+                    <div class="acompanahnte-container">
+                        <label>Seus Acompanhantes:</label>
+                        <button type="button" id="btnAdicionarAcomp" onclick="adicionarCampoAcompanhante()">+ Adicionar</button>
                     </div>
                     
                     <div id="listaAcompanhantesCampos"></div>

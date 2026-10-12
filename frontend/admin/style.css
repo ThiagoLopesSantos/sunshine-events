@@ -376,6 +376,7 @@ input:disabled {
     .linkConvite-info {
         display: flex;
         flex-direction: column;
+        gap: 15px;
     }
     /* Transforma os cards de estatísticas em uma coluna única ou empilhados */
     .cards-container, .estatisticas-grid {
