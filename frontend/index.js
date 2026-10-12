@@ -1,5 +1,5 @@
 
-const API_URL = 'https://sunshine-events-api.onrender.com/';
+const API_URL = 'https://sunshine-events-api.onrender.com';
 
 // Alterna entre os formulários escondendo todos e mostrando só o desejado
 function alternarTelas(idTelaDesejada) {

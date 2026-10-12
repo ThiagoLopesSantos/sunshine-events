@@ -1,4 +1,4 @@
-const API_URL = 'https://sunshine-events-api.onrender.com/';
+const API_URL = 'https://sunshine-events-api.onrender.com';
 let convidadoAtual = null;
 
 // ==================== CAPTURA DO ID DO EVENTO NA URL ====================

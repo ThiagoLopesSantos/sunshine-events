@@ -1,4 +1,4 @@
-const API_URL = 'https://sunshine-events-api.onrender.com/';
+const API_URL = 'https://sunshine-events-api.onrender.com';
 const token = localStorage.getItem('meu_token_rsvp');
 
 if (!token) {
