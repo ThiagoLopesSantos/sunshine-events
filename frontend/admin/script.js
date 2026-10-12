@@ -112,8 +112,9 @@ function renderizarTabela(convidados) {
 
         // Gera o link personalizado com o ID do admin logado
         const adminId = localStorage.getItem('admin_id') || 1;
-        const baseUrl = window.location.href.replace('dashboard.html', 'convidados/convite.html');
-        const linkConvite = `${baseUrl}?evento=${adminId}`;
+        const origem = window.location.origin;
+        const caminhoPasta = window.location.pathname.substring(0, window.location.pathname.indexOf('/admin/'));
+        const linkConvite = `${origem}${caminhoPasta}/convidados/convite.html?evento=${adminId}`;
 
         // Textos formatados para o WhatsApp
         const msgConvite = encodeURIComponent(`Olá ${c.nome_completo}! É uma alegria ter você conosco. Por favor, acesse o link abaixo para confirmar sua presença no nosso evento: ${linkConvite}`);
@@ -359,9 +360,11 @@ document.getElementById('formPerfil').addEventListener('submit', async function(
 // Exibe o link do convite na dashboard ao carregar a página
 window.addEventListener('DOMContentLoaded', () => {
     const adminId = localStorage.getItem('admin_id') || 1;
-    // Pega a URL atual do site e aponta para a pasta de convidados
-    const baseUrl = window.location.href.replace('admin/dashboard.html', 'convidados/convite.html');
-    const linkFinal = `${baseUrl}?evento=${adminId}`;
+
+    // Pega a origem do site e monta o link correto apontando para a pasta convidados
+    const origem = window.location.origin; // Ex: http://127.0.0.1:5500
+    const caminhoPasta = window.location.pathname.substring(0, window.location.pathname.indexOf('/admin/'));
+    const linkFinal = `${origem}${caminhoPasta}/convidados/convite.html?evento=${adminId}`;
     
     const elementoLink = document.getElementById('linkConviteTexto');
     if(elementoLink) {
@@ -371,9 +374,17 @@ window.addEventListener('DOMContentLoaded', () => {
 
 function copiarLinkConvite() {
     const adminId = localStorage.getItem('admin_id') || 1;
-    const baseUrl = window.location.href.replace('dashboard.html', 'convidados/convite.html');
-    const linkFinal = `${baseUrl}?evento=${adminId}`;
+
+// Monta o link blindado apontando para a pasta convidados
+    const origem = window.location.origin;
+    const caminhoPasta = window.location.pathname.substring(0, window.location.pathname.indexOf('/admin/'));
+    const linkFinal = `${origem}${caminhoPasta}/convidados/convite.html?evento=${adminId}`;
     
-    navigator.clipboard.writeText(linkFinal);
-    alert("Link do convite copiado com sucesso!");
+   // Copia para a área de transferência e avisa o usuário
+    navigator.clipboard.writeText(linkFinal).then(() => {
+        alert("Link do convite copiado com sucesso!");
+    }).catch(err => {
+        console.error('Erro ao copiar: ', err);
+        alert("Não foi possível copiar o link automaticamente.");
+    });
 }
