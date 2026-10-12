@@ -180,11 +180,21 @@ footer {
 /* ==================== RESPONSIVIDADE: LOGIN E CADASTRO ADMIN ==================== */
 @media screen and (max-width: 768px) {
     body {
-        padding: 15px;
+        padding: 10px;
         display: flex;
         justify-content: center;
         align-items: center;
         min-height: 100vh;
+    }
+
+    .brand-header {
+        padding: 20px;
+        margin-bottom: 10px;
+        font-size: 25px;
+
+        h1 {
+            font-size: 25px;
+        }
     }
 
     .container, .auth-box, .card-login {

@@ -87,9 +87,44 @@ body {
 .btn-novo { background-color: var(--primary-color); color: var(--card-bg); }
 .btn-sair { background-color: var(--danger-color); color: var(--card-bg); }
 
+.linkConvite {
+    background: var(--card-bg); 
+    padding: 15px 20px; 
+    border-radius: 12px; 
+    margin-bottom: 20px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+
+    button {
+        width: auto; 
+        padding: 8px 14px; 
+        font-size: 12px; 
+        background-color: var(--link-color); 
+        color: var(--card-bg); 
+        border: none; 
+        border-radius: 6px; 
+        cursor: pointer;
+    }
+}
+
+.linkConvite-info {
+    span {
+        font-size: 12px; 
+        color: var(--text-muted); 
+        margin-left: 10px;
+    }
+    
+}
+.linkConvite-title {
+    font-size: 13px; 
+    color: var(--primary-color);
+}
+
 /* Cards */
 .cards-container { display: flex; gap: 20px; margin-bottom: 30px; }
-.card { flex: 1; background: #fff; padding: 20px; border-radius: 8px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-bottom: 4px solid var(--link-color); }
+.card { flex: 1; background: var(--bg-color); padding: 20px; border-radius: 8px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-bottom: 4px solid var(--link-color); }
 .card h3 { margin: 0; font-size: 14px; color: var(--text-muted); text-transform: uppercase; }
 .card p { margin: 10px 0 0; font-size: 32px; font-weight: bold; color: var(--text-main); }
 .card.confirmados { border-color: var(--success-color); }
@@ -208,8 +243,8 @@ th {
 
 
 /* =================================================================
-   MELHORIAS DE CARDS E ESTADOS (STYLE.CSS)
-   ================================================================= */
+    MELHORIAS DE CARDS E ESTADOS (STYLE.CSS)
+================================================================= */
 
 /* Container dos Cards de Resumo */
 .cards-container {
@@ -305,7 +340,38 @@ input:disabled {
 
     .dashboard-container, header, main {
         width: 100% !important;
-        padding: 10px !important;
+    }
+
+    .header {
+        flex-direction: column;
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .header-brand-info {
+        width: 100%;
+        text-align: center;
+        h1 {
+            font-size: 18px;
+        }
+    }
+
+    .header-brand {
+        font-size: 18px;
+    }
+
+    .header-actions {
+        button {
+            padding: 8px;
+            font-size: 10px;
+            width: 100%;
+        }
+    }
+
+    .linkConvite {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
     }
 
     /* Transforma os cards de estatísticas em uma coluna única ou empilhados */
@@ -316,9 +382,15 @@ input:disabled {
     }
 
     .card {
-        width: 100% !important;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px;
     }
 
+    .controles-tabela {
+        flex-direction: column;
+    }
     /* Torna a tabela de convidados rolável lateralmente para não quebrar a tela do celular */
     .table-responsive, table {
         display: block;
@@ -336,7 +408,7 @@ input:disabled {
 
     /* Modais ocupando a tela inteira confortavelmente no celular */
     .modal-content {
-        width: 95% !important;
+        width: 80% !important;
         margin: 10% auto;
         padding: 15px !important;
     }

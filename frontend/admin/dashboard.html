@@ -23,12 +23,12 @@
             </div>
 
             <!-- Bloco para exibir o Link do Convite -->
-            <div style="background: #fff; padding: 15px 20px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
-                <div>
-                    <strong style="font-size: 13px; color: #2f3542;">Link do seu Convite (RSVP):</strong>
-                    <span id="linkConviteTexto" style="font-size: 12px; color: #718093; margin-left: 10px;">Carregando...</span>
+            <div class="linkConvite">
+                <div class="linkConvite-info">
+                    <strong class="linkConvite-title">Link do seu Convite (RSVP):</strong>
+                    <span id="linkConviteTexto">Carregando...</span>
                 </div>
-                <button onclick="copiarLinkConvite()" style="width: auto; padding: 8px 14px; font-size: 12px; background-color: #1e90ff; color: white; border: none; border-radius: 6px; cursor: pointer;">Copiar Link</button>
+                <button onclick="copiarLinkConvite()">Copiar Link</button>
             </div>
     
             <div class="cards-container">                
