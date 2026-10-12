@@ -24,6 +24,16 @@ else:
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
+# Gerenciador de contexto compatível com blocos 'with' (usado no auth.py)
+@contextmanager
+def obter_conexao_contexto():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+# Gerenciador para injeção via Depends() no FastAPI
 def obter_conexao():
     db = SessionLocal()
     try:
