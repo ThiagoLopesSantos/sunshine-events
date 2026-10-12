@@ -253,11 +253,10 @@ body {
 }
 
 .acompanhante-inputs {
-    padding: 5px;
+    padding: 9px 10px;
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
     box-sizing: border-box;
-    background-color: var(--bg-color);
     
     input:focus {
         outline: none;

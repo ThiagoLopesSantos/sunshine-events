@@ -329,6 +329,15 @@ input:disabled {
     flex: 1;
 }
 
+footer {
+    text-align: center; 
+    margin-top: 40px; 
+    color: var(--text-muted); 
+    font-size: 11px; 
+    display:flex; 
+    flex-direction: column;
+}
+
 .btn-salvar:hover { opacity: 0.9; }
 
 /* ==================== RESPONSIVIDADE: DASHBOARD DO ADMIN ==================== */
