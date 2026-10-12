@@ -295,3 +295,49 @@ input:disabled {
 }
 
 .btn-salvar:hover { opacity: 0.9; }
+
+/* ==================== RESPONSIVIDADE: DASHBOARD DO ADMIN ==================== */
+@media screen and (max-width: 768px) {
+    /* Ajusta o container principal da dashboard */
+    body {
+        padding: 5px;
+    }
+
+    .dashboard-container, header, main {
+        width: 100% !important;
+        padding: 10px !important;
+    }
+
+    /* Transforma os cards de estatísticas em uma coluna única ou empilhados */
+    .cards-container, .estatisticas-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .card {
+        width: 100% !important;
+    }
+
+    /* Torna a tabela de convidados rolável lateralmente para não quebrar a tela do celular */
+    .table-responsive, table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    /* Ajusta os botões de ação na tabela para toque fácil */
+    td .btn-acao {
+        padding: 8px 12px;
+        font-size: 13px;
+        margin-bottom: 5px;
+    }
+
+    /* Modais ocupando a tela inteira confortavelmente no celular */
+    .modal-content {
+        width: 95% !important;
+        margin: 10% auto;
+        padding: 15px !important;
+    }
+}

@@ -176,3 +176,33 @@ footer {
     display:flex; 
     flex-direction: column;
 }
+
+/* ==================== RESPONSIVIDADE: LOGIN E CADASTRO ADMIN ==================== */
+@media screen and (max-width: 768px) {
+    body {
+        padding: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .container, .auth-box, .card-login {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 20px !important;
+        box-shadow: none;
+        border: none;
+    }
+
+    input, select, textarea {
+        font-size: 16px !important; /* Evita zoom automático irritante no iPhone ao focar no input */
+        padding: 12px !important;
+    }
+
+    button {
+        width: 100%;
+        padding: 14px !important;
+        font-size: 16px !important;
+    }
+}
