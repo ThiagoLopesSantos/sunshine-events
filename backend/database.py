@@ -6,16 +6,30 @@ from sqlalchemy.orm import sessionmaker
 # Pega a URL do banco do Supabase via Variável de Ambiente, ou usa SQLite local para testes locais
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./casamento.db")
 
+# Configuração robusta para evitar timeouts e quedas de conexão na nuvem
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 if DATABASE_URL.startswith("sqlite"):
     engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 else:
-    engine = create_engine(DATABASE_URL)
+    engine = create_engine(
+        DATABASE_URL,
+        pool_pre_ping=True,       # Verifica se a conexão está ativa antes de usar
+        pool_size=5,              # Mantém um pool saudável de conexões
+        max_overflow=10,
+        connect_args={"connect_timeout": 10} # Timeout de 10 segundos para não estourar a porta do Render
+    )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
+
+def obter_conexao():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 # Modelos das Tabelas que serão criadas automaticamente no PostgreSQL/Supabase
 class AdministradorModel(Base):
