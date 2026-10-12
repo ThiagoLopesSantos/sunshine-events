@@ -373,7 +373,10 @@ input:disabled {
         gap: 10px;
         padding: 10px;
     }
-
+    .linkConvite-info {
+        display: flex;
+        flex-direction: column;
+    }
     /* Transforma os cards de estatísticas em uma coluna única ou empilhados */
     .cards-container, .estatisticas-grid {
         display: flex;
@@ -385,7 +388,14 @@ input:disabled {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 5px;
+        margin: 0 auto;
+        width: 80%;
+        padding: 10px;
+
+        p {
+            margin: 0;
+            font-size: 20px;
+        }
     }
 
     .controles-tabela {
