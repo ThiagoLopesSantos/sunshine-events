@@ -1,59 +1,55 @@
 import os
-import sqlite3
-from contextlib import contextmanager
+from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
-# Sobe um nível da pasta backend/ para salvar na raiz do projeto
-DATABASE_NAME = os.path.join(os.path.dirname(os.path.dirname(__file__)), "casamento.db")
+# Pega a URL do banco do Supabase via Variável de Ambiente, ou usa SQLite local para testes locais
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./casamento.db")
 
-@contextmanager
-def obter_conexao():
-    conexao = sqlite3.connect(DATABASE_NAME)
-    try:
-        yield conexao
-    finally:
-        conexao.close()
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+if DATABASE_URL.startswith("sqlite"):
+    engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+else:
+    engine = create_engine(DATABASE_URL)
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+
+# Modelos das Tabelas que serão criadas automaticamente no PostgreSQL/Supabase
+class AdministradorModel(Base):
+    __tablename__ = "administradores"
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    nome = Column(String, nullable=False)
+    email = Column(String, unique=True, index=True, nullable=False)
+    celular = Column(String, nullable=False)
+    senha = Column(String, nullable=False)
+    nome_evento = Column(String, nullable=True)
+    data_evento = Column(String, nullable=True)
+
+class ConvidadoModel(Base):
+    __tablename__ = "convidados"
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    admin_id = Column(Integer, nullable=False)
+    nome_completo = Column(String, nullable=False)
+    celular = Column(String, nullable=False)
+    status_presenca = Column(String, default="pendente")
+    limite_acompanhantes = Column(Integer, default=0)
+
+class AcompanhanteModel(Base):
+    __tablename__ = "acompanhantes"
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    convidado_id = Column(Integer, nullable=False)
+    nome = Column(String, nullable=False)
+    idade = Column(Integer, nullable=False)
 
 def criar_tabelas():
-    with obter_conexao() as conexao:
-        cursor = conexao.cursor()
-        
-        # Tabela de Administradores
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS administradores (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nome TEXT NOT NULL,
-                email TEXT UNIQUE NOT NULL,
-                celular TEXT NOT NULL,
-                senha TEXT NOT NULL,
-                nome_evento TEXT,
-                data_evento TEXT
-            )
-        """)
-        
-        # Tabela de Convidados com índice único combinando admin_id e celular
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS convidados (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                admin_id INTEGER NOT NULL,
-                nome_completo TEXT NOT NULL,
-                celular TEXT NOT NULL,
-                status_presenca TEXT DEFAULT 'pendente',
-                limite_acompanhantes INTEGER DEFAULT 0,
-                nome_acompanhante TEXT,
-                FOREIGN KEY (admin_id) REFERENCES administradores (id),
-                UNIQUE(admin_id, celular)
-            )
-        """)
-        
-        # Tabela de Acompanhantes detalhados
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS acompanhantes (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                convidado_id INTEGER,
-                nome TEXT NOT NULL,
-                idade INTEGER NOT NULL,
-                FOREIGN KEY (convidado_id) REFERENCES convidados (id) ON DELETE CASCADE
-            )
-        """)
-        
-        conexao.commit()
+    Base.metadata.create_all(bind=engine)
+
+def obter_conexao():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
