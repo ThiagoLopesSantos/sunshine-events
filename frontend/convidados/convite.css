@@ -200,3 +200,37 @@ body {
 .escondido {
     display: none !important;
 }
+
+/* ==================== RESPONSIVIDADE PARA CELULARES ==================== */
+@media screen and (max-width: 768px) {
+    body {
+        padding: 10px; /* Reduz a margem da tela em celulares para aproveitar melhor o espaço */
+    }
+
+    .container, .card-container, .box-conteudo {
+        width: 100% !important;
+        padding: 20px 15px !important;
+        margin: 0 auto;
+    }
+
+    h1 {
+        font-size: 1.5rem !important; /* Diminui o título principal para não quebrar a linha */
+    }
+
+    /* Faz os campos dos acompanhantes empilharem no celular em vez de ficarem lado a lado */
+    .acompanhante-inputs {
+        flex-direction: column !important;
+        gap: 10px;
+    }
+
+    .acompanhante-inputs input {
+        width: 100% !important;
+    }
+
+    /* Botões de ação grandes e fáceis de clicar com o dedo */
+    button, .btn-acao {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 8px;
+    }
+}
