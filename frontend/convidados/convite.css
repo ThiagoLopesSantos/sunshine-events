@@ -254,7 +254,6 @@ body {
 
 .acompanhante-inputs {
     padding: 5px;
-    border: 1px solid var(--border-color);
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
     box-sizing: border-box;
@@ -294,16 +293,6 @@ body {
 
     h1 {
         font-size: 1.5rem !important; /* Diminui o título principal para não quebrar a linha */
-    }
-
-    /* Faz os campos dos acompanhantes empilharem no celular em vez de ficarem lado a lado */
-    .acompanhante-inputs {
-        flex-direction: column !important;
-        gap: 10px;
-    }
-
-    .acompanhante-inputs input {
-        width: 100% !important;
     }
 
     /* Botões de ação grandes e fáceis de clicar com o dedo */
