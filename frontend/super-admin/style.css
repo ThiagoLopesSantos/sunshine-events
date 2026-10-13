@@ -79,32 +79,37 @@ button:hover {
     background: #c0392b;
 }
 
-.list-table {
-    width: 100vw;
-}
-/* Wrapper para permitir rolagem horizontal em telas pequenas */
 .table-responsive {
     width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     margin-bottom: 20px;
+    border: 1px solid #e1e8ed;
+    border-radius: 8px;
+    background: #fff;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
+    min-width: 750px; /* Garante espaço suficiente para todas as colunas não esmagarem */
 }
 
 th, td {
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+    white-space: nowrap;
 }
 
 th {
     background-color: #f8f9fa;
     color: #2c3e50;
+}
+
+tr:hover {
+    background-color: #ccc;
 }
 
 .badge-expirado {
@@ -211,16 +216,6 @@ th {
     .list-table h2 {
         font-size: 20px;
         text-align: center;
-    }
-
-    /* ---------- SCROLL HORIZONTAL DA TABELA ---------- */
-    .table-responsive {
-        width: 100%;
-        overflow-x: auto; /* Ativa a barra de rolagem horizontal apenas na tabela */
-        -webkit-overflow-scrolling: touch; /* Suaviza o scroll em dispositivos móveis iOS */
-        margin-top: 15px;
-        border: 1px solid #e1e8ed;
-        border-radius: 6px;
     }
 
     .table-responsive table {
