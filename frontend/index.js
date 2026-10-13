@@ -1,5 +1,6 @@
 
 const API_URL = 'https://sunshine-events-api.onrender.com';
+// const API_URL = 'http://127.0.0.1:8000';
 
 // Alterna entre os formulários escondendo todos e mostrando só o desejado
 function alternarTelas(idTelaDesejada) {
@@ -39,8 +40,12 @@ document.getElementById('formLogin').addEventListener('submit', async function(e
     
     msgBox.innerText = 'Autenticando...';
 
+    // Se o email for o seu, tenta a rota de Super Admin primeiro
+    const ehSuperAdmin = (email.trim().toLowerCase() === 'thiagodev8343@gmail.com');
+    const rotaLogin = ehSuperAdmin ? `${API_URL}/master/login` : `${API_URL}/admin/login`;
+
     try {
-        const resposta = await fetch(`${API_URL}/admin/login`, {
+        const resposta = await fetch(rotaLogin, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: email, senha: senha })
@@ -50,10 +55,18 @@ document.getElementById('formLogin').addEventListener('submit', async function(e
 
         if (resposta.ok && dados.access_token) {
             localStorage.setItem('meu_token_rsvp', dados.access_token);
-            localStorage.setItem('admin_id', dados.admin_id),
-            localStorage.setItem('nome_evento', dados.nome_evento);
-            localStorage.setItem('data_evento', dados.data_evento);
-            window.location.href = 'admin/dashboard.html';
+            
+            if (ehSuperAdmin) {
+                localStorage.setItem('meu_token_rsvp', dados.access_token);
+                localStorage.setItem('nome_super', dados.nome || "Thiago Lopes Santos"); // Salva o nome
+                // Redireciona para o painel master exclusivo
+                window.location.href = 'super-admin/index.html';
+            } else {
+                localStorage.setItem('admin_id', dados.admin_id);
+                localStorage.setItem('nome_evento', dados.nome_evento);
+                localStorage.setItem('data_evento', dados.data_evento);
+                window.location.href = 'admin/dashboard.html';
+            }
         } else {
             msgBox.innerText = dados.detail || dados.mensagem || "E-mail ou senha incorretos.";
         }
@@ -73,18 +86,20 @@ document.getElementById('formCadastro').addEventListener('submit', async functio
     const dataEvento = document.getElementById('cadDataEvento').value;
     const senha = document.getElementById('cadSenha').value;
     const confirmaSenha = document.getElementById('cadConfirmaSenha').value;
+    const tokenLicenca = document.getElementById('tokenLicenca').value; // <-- Captura o token digitado no HTML
     const msgBox = document.getElementById('msgCadastro');
-
 
     // Validação de Segurança da Senha
     if (senha.length < 6) {
-        msgBox.ClassName = 'mensagem erro';
+        msgBox.className = 'mensagem erro';
         msgBox.innerText = "A senha precisa ter pelo menos 6 caracteres.";
+        return;
     }
 
     if (senha !== confirmaSenha) {
         msgBox.className = 'mensagem erro';
         msgBox.innerText = "As senhas não coincidem. Verifique e tente novamente.";
+        return;
     }
     
     msgBox.className = 'mensagem';
@@ -101,13 +116,13 @@ document.getElementById('formCadastro').addEventListener('submit', async functio
                 celular: celular, 
                 nome_evento: nomeEvento, 
                 data_evento: dataEvento, 
-                senha: senha 
+                senha: senha,
+                token: tokenLicenca // <-- Enviando o token para o backend validar!
             })
         });
 
         const dados = await resposta.json();
 
-        // O SEGREDO É ESSA LINHA ABAIXO. Precisamos exigir que o status seja 'sucesso'
         if (resposta.ok && dados.status === 'sucesso') {
             msgBox.className = 'mensagem sucesso';
             msgBox.innerText = "Cadastro realizado com sucesso! Redirecionando para o login...";
@@ -117,7 +132,6 @@ document.getElementById('formCadastro').addEventListener('submit', async functio
                 document.getElementById('loginEmail').value = email; 
             }, 2000);
         } else {
-            // Agora sim, se o banco falhar, o erro vai aparecer em vermelho!
             msgBox.className = 'mensagem erro';
             msgBox.innerText = dados.mensagem || dados.detail || "Erro ao cadastrar.";
         }

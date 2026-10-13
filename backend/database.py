@@ -1,6 +1,7 @@
 import os
 from contextlib import contextmanager
-from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy import create_engine, Column, Integer, String, Boolean, DateTime
+from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -43,6 +44,13 @@ def obter_conexao():
         db.close()
 
 # Modelos das Tabelas que serão criadas automaticamente no PostgreSQL/Supabase
+class SuperAdminModel(Base):
+    __tablename__ = "super_administradores"
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    nome = Column(String, nullable=False)
+    email = Column(String, unique=True, index=True, nullable=False)
+    senha = Column(String, nullable=False)
+
 class AdministradorModel(Base):
     __tablename__ = "administradores"
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
@@ -52,6 +60,14 @@ class AdministradorModel(Base):
     senha = Column(String, nullable=False)
     nome_evento = Column(String, nullable=True)
     data_evento = Column(String, nullable=True)
+
+class TokenModel(Base):
+    __tablename__ = "tokens_licenca"
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    token = Column(String, unique=True, index=True, nullable=False)
+    usado = Column(Boolean, default=False)
+    criado_em = Column(DateTime, default=datetime.utcnow)
+    usado_por_email = Column(String, nullable=True)
 
 class ConvidadoModel(Base):
     __tablename__ = "convidados"

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☀️ SUNSHINE EVENTS - Super Admin</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <a href="javascript:void(0);" onclick="sair()" class="sair">Sair do Sistema</a>
+        <div class="brand-header">
+            <h1>☀️ Sunshine Events</h2>
+            <p>Sistema de Gestão & RSVP</p>
+        </div>
+        <p id="nomeSuperAdmin" style="font-weight: bold; color: #2c3e50; margin-bottom: 5px;"></p>
+        <p class="sub">Gestão centralizada de licenças e administradores da plataforma.</p>
+
+       <!-- Seção de Geração de Token -->
+        <div class="card-acao">
+            <div>
+                <h3>Gerar Novo Token de Ativação</h3>
+                <p style="margin: 5px 0 0 0; font-size: 14px; color: #555;">Crie um código de acesso exclusivo para um novo evento.</p>
+                
+                <!-- Área fixa do token -->
+                <div style="margin-top: 12px;">
+                    <span style="font-size: 13px; color: #666; display: block; margin-bottom: 4px;">Token gerado:</span>
+                    <div id="resultadoToken" class="token-box" style="color: #95a5a6; font-style: italic;">Nenhum token gerado ainda</div>
+                </div>
+            </div>
+            <button type="button" onclick="gerarToken(event)">Gerar Token</button>
+        </div>
+
+        <!-- Listagem de Administradores -->
+        <div class="list-table">
+            <h2>Administradores Cadastrados</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome / Evento</th>
+                            <th>E-mail / Celular</th>
+                            <th>Data do Evento</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaAdmins">
+                        <tr><td colspan="5" style="text-align: center;">A carregar administradores...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Script de segurança contra refresh fantasma -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnGerar = document.querySelector('button[onclick*="gerarToken"]');
+            if (btnGerar) {
+                btnGerar.addEventListener('click', (e) => {
+                    e.preventDefault(); // Força o navegador a congelar qualquer reload
+                    e.stopPropagation();
+                });
+            }
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

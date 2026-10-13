@@ -1,13 +1,11 @@
 import os
 import bcrypt
 from datetime import datetime, timedelta
-from typing import Optional
 from jose import JWTError, jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from .database import obter_conexao_contexto, AdministradorModel
+from .database import obter_conexao_contexto, AdministradorModel, SuperAdminModel
 
-# Configurações de Segurança
 SECRET_KEY = os.getenv("SECRET_KEY", "sua_chave_secreta_super_segura_aqui_mude_depois")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
@@ -34,22 +32,23 @@ def criar_token_acesso(dados: dict):
     dados_cópia.update({"exp": exp_tempo})
     return jwt.encode(dados_cópia, SECRET_KEY, algorithm=ALGORITHM)
 
+# Dependência para Administradores Comuns
 def obter_admin_atual(credentials: HTTPAuthorizationCredentials = Depends(security)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Credenciais de autenticação inválidas ou expiradas.",
+        detail="Credenciais inválidas.",
         headers={"WWW-Authenticate": "Bearer"},
     )
     token = credentials.credentials
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email: str = payload.get("sub")
-        if email is None:
+        tipo: str = payload.get("tipo", "admin")
+        if email is None or tipo != "admin":
             raise credentials_exception
     except JWTError:
         raise credentials_exception
 
-    # Usa o novo contexto seguro para buscar o admin no PostgreSQL/Supabase
     with obter_conexao_contexto() as db:
         admin = db.query(AdministradorModel).filter(AdministradorModel.email == email).first()
 
@@ -57,3 +56,28 @@ def obter_admin_atual(credentials: HTTPAuthorizationCredentials = Depends(securi
         raise credentials_exception
 
     return {"id": admin.id, "nome": admin.nome, "email": admin.email, "celular": admin.celular}
+
+# Dependência Exclusiva para o Super Admin
+def obter_super_admin_atual(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="Acesso negado. Apenas o Super Admin pode aceder a esta rota.",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    token = credentials.credentials
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        tipo: str = payload.get("tipo")
+        if email is None or tipo != "super":
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+
+    with obter_conexao_contexto() as db:
+        super_admin = db.query(SuperAdminModel).filter(SuperAdminModel.email == email).first()
+
+    if super_admin is None:
+        raise credentials_exception
+
+    return {"id": super_admin.id, "nome": super_admin.nome, "email": super_admin.email}

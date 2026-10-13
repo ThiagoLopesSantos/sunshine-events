@@ -9,6 +9,7 @@ class AdminSchema(BaseModel):
     senha: str 
     nome_evento: str
     data_evento: str
+    token: str
 
 class LoginSchema(BaseModel):
     email: str
