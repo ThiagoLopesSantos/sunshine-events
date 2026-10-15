@@ -370,6 +370,15 @@ footer {
         flex-direction: column;
     }
 
+    .tabela-wrapper {
+        overflow-x: auto; /* Permite rolar a tabela para os lados no celular */
+        -webkit-overflow-scrolling: touch; /* Melhora a suavidade do scroll no iPhone/Android */
+    }
+
+    table {
+        min-width: 650px; /* Garante que a tabela tenha largura mínima para não esmagar as colunas */
+    }
+
     .modal-content {
         width: 90% !important;
         padding: 20px !important;
