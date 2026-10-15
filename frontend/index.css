@@ -1,19 +1,19 @@
 /* =================================================================
-    SUNSHINE EVENTS - INDEX.CSS (Login, Cadastro, Recuperação)
+   SUNSHINE EVENTS - INDEX.CSS (Login, Cadastro, Recuperação)
 ================================================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
 
 :root {
-    --primary-color: #2f3542;
-    --accent-color: #f39c12; /* Tom Dourado/Solar da marca */
-    --link-color: #1e90ff;
-    --success-color: #2ed573;
-    --danger-color: #ff4757;
-    --bg-color: #f8f9fa;
+    --primary-color: #2c3e50;
+    --accent-color: #d4af37; /* Dourado suave da marca */
+    --link-color: #2980b9;
+    --success-color: #27ae60;
+    --danger-color: #c0392b;
+    --bg-color: #FAF8F3; /* Tom creme/champanhe romântico */
     --card-bg: #ffffff;
-    --text-main: #333333;
-    --text-muted: #718093;
+    --text-main: #2f3542;
+    --text-muted: #7f8c8d;
     --border-color: #e2e8f0;
 }
 
@@ -22,49 +22,67 @@ body {
     background-color: var(--bg-color);
     color: var(--text-main);
     margin: 0;
-    padding: 0;
+    padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.fundo {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .container {
     background: var(--card-bg);
-    padding: 40px;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.06);
     width: 100%;
-    max-width: 420px;
+    max-width: 440px;
     box-sizing: border-box;
     text-align: center;
+    border: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 /* Cabeçalho da Marca */
 .brand-header {
     text-align: center;
     margin-bottom: 25px;
-    border: 1px solid var(--accent-color);
-    padding: 10px;
-    border-radius: 19px 0;
-    box-shadow: 0 0 20px 0px rgba(154, 154, 0, 0.5);
-
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #e1e8ed;
+    width: 100%;
+    max-width: 440px;
     
     h1 {
         font-family: 'Playfair Display', serif;
+        font-style: italic;
         margin: 0;
         color: var(--primary-color);
-        font-size: 40px;
+        font-size: 32px;
     }
 
     p {
-        font-size: 11px;
-        color: var(--text-muted);
+        font-size: 12px;
+        color: var(--accent-color);
         text-transform: uppercase;
-        letter-spacing: 1.5px;
-        margin-top: 6px;
+        letter-spacing: 2px;
+        margin-top: 5px;
         font-weight: 600;
     }
+}
+
+.container h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--primary-color);
+    margin-top: 0;
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
 /* Formulários e Inputs */
@@ -72,6 +90,8 @@ form span {
     font-size: 13px; 
     color: var(--text-muted); 
     text-align: center;
+    display: block;
+    margin-bottom: 15px;
 }
 
 .form-group {
@@ -81,29 +101,29 @@ form span {
 
 .form-group label {
     display: block;
-    margin: 10px 0px;
-    font-weight: 500;
+    margin-bottom: 6px;
+    font-weight: 600;
     font-size: 13px;
     color: var(--primary-color);
 }
 
 .form-group input {
     width: 100%;
-    padding: 12px 14px;
+    padding: 12px 16px;
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: 10px;
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
     box-sizing: border-box;
-    background-color: var(--bg-color);
+    background-color: #fafbfc;
     transition: all 0.2s ease;
 }
 
 .form-group input:focus {
     outline: none;
     border-color: var(--accent-color);
-    background-color: var(--bg-color);
-    box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.1);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
 }
 
 /* Botões */
@@ -113,29 +133,29 @@ button {
     font-weight: 600;
     font-size: 14px;
     border: none;
-    border-radius: 8px;
-    padding: 12px 20px;
+    border-radius: 10px;
+    padding: 14px 20px;
     width: 100%;
     transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .btn-cadastro, .btn-recuperar, .btn-salvar, .btn-login {
-    background-color: var(--accent-color);
+    background-color: var(--primary-color);
     color: white;
     margin-top: 10px;
 }
 
 .btn-cadastro:hover, .btn-recuperar:hover, .btn-salvar:hover, .btn-login:hover {
-    background-color: #1e272e;
+    background-color: var(--accent-color);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Links de Alternância */
 .toggle-link {
     display: block;
     text-align: center;
-    color: var(--accent-color);
+    color: var(--link-color);
     text-decoration: none;
     font-size: 13px;
     font-weight: 500;
@@ -148,7 +168,6 @@ button {
     font-size: 12px;
     margin-top: 8px;
 }
-
 
 .toggle-link:hover {
     text-decoration: underline;
@@ -170,49 +189,26 @@ button {
 
 footer {
     text-align: center; 
-    margin-top: 40px; 
-    color: #a4b0be; 
+    margin-top: 30px; 
+    color: var(--text-muted); 
     font-size: 11px; 
-    display:flex; 
+    display: flex; 
     flex-direction: column;
+    gap: 4px;
 }
 
-/* ==================== RESPONSIVIDADE: LOGIN E CADASTRO ADMIN ==================== */
+/* ==================== RESPONSIVIDADE ==================== */
 @media screen and (max-width: 768px) {
     body {
-        padding: 0px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
+        padding: 10px;
     }
 
-    .brand-header {
-        padding: 20px;
-        margin-bottom: 10px;
-        font-size: 25px;
-
-        h1 {
-            font-size: 25px;
-        }
-    }
-
-    .container, .auth-box, .card-login {
-        width: 100% !important;
+    .container, .brand-header {
         max-width: 100% !important;
         padding: 20px !important;
-        box-shadow: none;
-        border: none;
     }
 
     input, select, textarea {
-        font-size: 16px !important; /* Evita zoom automático irritante no iPhone ao focar no input */
-        padding: 12px !important;
-    }
-
-    button {
-        width: 100%;
-        padding: 14px !important;
-        font-size: 16px !important;
+        font-size: 16px !important; /* Evita zoom automático no iPhone */
     }
 }

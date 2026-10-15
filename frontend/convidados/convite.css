@@ -1,20 +1,20 @@
 /* =================================================================
-SUNSHINE EVENTS - CONVITE.CSS (Portal do Convidado)
+CASAMENTO DE JÉSSICA & THIAGO - CONVITE.CSS (Portal do Convidado)
 ================================================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
 
 :root {
-    --primary-color: #2f3542;
-    --accent-color: #f39c12;
-    --success-color: #2ed573;
-    --danger-color: #ff4757;
-    --bg-color: #f8f9fa;
+    --primary-color: #2c3e50;
+    --accent-color: #d4af37; /* Dourado suave para detalhes */
+    --success-color: #27ae60;
+    --danger-color: #c0392b;
+    --bg-color: #FAF8F3; /* Tom creme/champanhe romântico */
     --card-bg: #ffffff;
-    --text-main: #333333;
-    --text-muted: #718093;
+    --text-main: #2f3542;
+    --text-muted: #7f8c8d;
     --border-color: #e2e8f0;
-    --blue: #1e90ff;
+    --blue: #3498db;
 }
 
 body {
@@ -31,106 +31,118 @@ body {
     box-sizing: border-box;
 }
 
-/* Card Principal */
+/* Card Principal do Convite */
 .convite-container {
     background: var(--card-bg);
-    padding: 40px;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.06);
     width: 100%;
     max-width: 480px;
     box-sizing: border-box;
     text-align: center;
+    border: 1px solid rgba(212, 175, 55, 0.2);
     
     h2 {
         font-family: 'Playfair Display', serif;
         color: var(--primary-color);
         margin-top: 0;
-        font-size: 24px;
+        font-size: 26px;
     }
     
     p {
         color: var(--text-muted);
         font-size: 14px;
-        line-height: 1.5;
+        line-height: 1.6;
     }
 }
 
-/* Cabeçalho da Marca */
+/* Cabeçalho Romântico do Convite (Sem cara de sistema) */
 .brand-header {
     text-align: center;
     margin-bottom: 25px;
-    border: 1px solid var(--accent-color);
-    padding: 10px;
-    border-radius: 19px 0;
-    box-shadow: 0 0 20px 0px rgba(154, 154, 0, 0.5);
-
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #e1e8ed;
     
     h1 {
         font-family: 'Playfair Display', serif;
+        font-style: italic;
         margin: 0;
         color: var(--primary-color);
-        font-size: 40px;
+        font-size: 32px;
+        letter-spacing: 0.5px;
     }
 
     p {
-        font-size: 11px;
-        color: var(--text-muted);
+        font-size: 12px;
+        color: var(--accent-color);
         text-transform: uppercase;
-        letter-spacing: 1.5px;
-        margin-top: 6px;
+        letter-spacing: 2px;
+        margin-top: 5px;
         font-weight: 600;
     }
 }
 
-/* Identificação do evento */
+/* Identificação do Evento */
 #infoEventoTopo {
     margin-bottom: 20px;
     text-align: center;
 }
 
 #tituloNomeEvento {
-    font-family: 'Playfair Display', 
-    serif; margin: 5px 0 0 0; 
-    color: #2f3542; 
-    font-size: 22px;
+    font-family: 'Playfair Display', serif; 
+    margin: 0; 
+    color: var(--primary-color); 
+    font-size: 20px;
+    font-weight: 500;
 }
 
 .limiteAcompanhante {
-    background: var(--bg-color); 
-    padding: 12px; 
-    border-radius: 6px; 
-    margin-bottom: 20px; 
+    background: #fdfbf7; 
+    border: 1px solid #faebd7;
+    padding: 14px; 
+    border-radius: 10px; 
+    margin-bottom: 25px; 
     font-size: 14px; 
     text-align: center;
+    color: var(--primary-color);
 }
 
 #msgErroBusca {
     color: var(--danger-color); 
-    font-size: 14px;
+    font-size: 13px;
     text-align: center; 
     margin-top: 15px; 
-    font-weight: bold;
+    font-weight: 600;
 }
 
 .acompanahnte-container {
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 
     label {
         margin: 0; 
-        font-weight: bold;
+        font-weight: 600;
+        font-size: 13px;
+        color: var(--primary-color);
     }
 
     button {
         width: auto; 
-        padding: 6px 12px; 
+        padding: 6px 14px; 
         font-size: 12px; 
-        background-color: var(--blue);
-        color: var(--bg-color);
+        background-color: var(--primary-color);
+        color: #fff;
         border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    button:hover {
+        background-color: var(--accent-color);
     }
 }
 
@@ -143,7 +155,7 @@ body {
 .form-group label {
     display: block;
     margin-bottom: 6px;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 13px;
     color: var(--primary-color);
 }
@@ -151,9 +163,9 @@ body {
 .form-group input, 
 .form-group select {
     width: 100%;
-    padding: 12px 14px;
+    padding: 12px 16px;
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: 10px;
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
     box-sizing: border-box;
@@ -165,7 +177,7 @@ body {
     outline: none;
     border-color: var(--accent-color);
     background-color: #fff;
-    box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.1);
+    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
 }
 
 /* Botões Gerais de Ação */
@@ -174,17 +186,18 @@ body {
     color: white;
     font-weight: 600;
     border: none;
-    border-radius: 8px;
-    padding: 12px 20px;
+    border-radius: 10px;
+    padding: 14px 20px;
     width: 100%;
     cursor: pointer;
     font-size: 14px;
     font-family: 'Montserrat', sans-serif;
     transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(44, 62, 80, 0.15);
 }
 
 .btn-primary:hover, .btn-acao:hover {
-    background-color: #1e272e;
+    background-color: #1a252f;
     transform: translateY(-1px);
 }
 
@@ -194,35 +207,41 @@ body {
     color: white;
     font-weight: 600;
     border: none;
-    border-radius: 8px;
-    padding: 12px 20px;
+    border-radius: 10px;
+    padding: 14px 20px;
     width: 100%;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 15px;
     font-family: 'Montserrat', sans-serif;
-    margin-bottom: 10px;
-    transition: opacity 0.2s;
+    margin-bottom: 12px;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.2);
 }
 
-.btn-confirmar:hover { opacity: 0.9; }
+.btn-confirmar:hover { 
+    background-color: #219653;
+    transform: translateY(-1px);
+}
 
 .btn-recusar {
-    background-color: var(--danger-color);
-    color: white;
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
+    background-color: transparent;
+    color: var(--danger-color);
+    font-weight: 500;
+    border: 1px solid #fadbd8;
+    border-radius: 10px;
     padding: 12px 20px;
     width: 100%;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
     font-family: 'Montserrat', sans-serif;
-    transition: opacity 0.2s;
+    transition: all 0.2s;
 }
 
-.btn-recusar:hover { opacity: 0.9; }
+.btn-recusar:hover { 
+    background-color: #fdf2f2; 
+}
 
-/* Ícones de Feedback (Sucesso / Recusa) */
+/* Ícones de Feedback */
 .icone-sucesso {
     font-size: 50px;
     color: var(--success-color);
@@ -243,60 +262,58 @@ body {
 #listaAcompanhantesCampos {
     justify-content: center;
     display: flex;
-    gap: 15px;
+    flex-direction: column;
+    gap: 10px;
 }
+
 .acompanhante-item {
     display: flex;
     flex-direction: column;
     gap: 10px;
-
 }
 
 .acompanhante-inputs {
-    padding: 9px 10px;
+    padding: 10px 14px;
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
     box-sizing: border-box;
-    
-    input:focus {
-        outline: none;
-        border-color: var(--accent-color);
-        background-color: var(--bg-color);
-        box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.1);
-    }
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    width: 100%;
+    background-color: #fafbfc;
+}
+
+.acompanhante-inputs:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+/* Rodapé discreto */
+footer {
+    text-align: center;
+    margin-top: 30px;
+    color: #a4b0be;
+    font-size: 11px;
 }
 
 /* ==================== RESPONSIVIDADE PARA CELULARES ==================== */
 @media screen and (max-width: 768px) {
     body {
-        padding: 10px; /* Reduz a margem da tela em celulares para aproveitar melhor o espaço */
+        padding: 12px;
     }
 
     .convite-container {
-        padding: 20px;
+        padding: 25px 20px;
     }
 
-    #infoEventoTopo {
-        margin-bottom: 15px;
-    }
-    
-    #tituloNomeEvento {
-        margin: 0;
+    .brand-header h1 {
+        font-size: 28px;
     }
 
-    .container, .card-container, .box-conteudo {
-        width: 100% !important;
-        padding: 20px 15px !important;
-        margin: 0 auto;
-    }
-
-    h1 {
-        font-size: 1.5rem !important; /* Diminui o título principal para não quebrar a linha */
-    }
-
-    /* Botões de ação grandes e fáceis de clicar com o dedo */
     button, .btn-acao {
         width: 100%;
-        padding: 12px;
+        padding: 14px;
     }
 }
