@@ -20,6 +20,7 @@ class ConvidadosSchema(BaseModel):
     celular: str
     status_presenca: str = "pendente"
     limite_acompanhantes: int = 0
+    categoria: Optional[str] = "Geral"
     nome_acompanhante: Optional[List[str]] = []   
 
 class AtualizarPresencaSchema(BaseModel):
@@ -30,6 +31,7 @@ class EditarConvidadoSchema(BaseModel):
     nome_completo: str
     celular: str
     limite_acompanhantes: int
+    categoria: Optional[str] = "Geral"
     nome_acompanhante: Optional[List[str]] = []
 
 class AcompanhanteSchema(BaseModel):

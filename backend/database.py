@@ -77,6 +77,7 @@ class ConvidadoModel(Base):
     celular = Column(String, nullable=False)
     status_presenca = Column(String, default="pendente")
     limite_acompanhantes = Column(Integer, default=0)
+    categoria = Column(String, default="Geral")
 
 class AcompanhanteModel(Base):
     __tablename__ = "acompanhantes"

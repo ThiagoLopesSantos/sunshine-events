@@ -322,6 +322,21 @@ footer {
     gap: 4px;
 }
 
+/* Etiquetas de Categoria na Tabela */
+.tag-categoria {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.tag-geral { background-color: #edf2f7; color: #4a5568; }
+.tag-padrinho { background-color: #fef9e7; color: var(--accent-color); border: 1px solid rgba(212, 175, 55, 0.3); }
+.tag-familia { background-color: #e8f8f5; color: var(--success-color); }
+.tag-vip { background-color: #fbeee6; color: #d35400; }
+
 /* ==================== RESPONSIVIDADE: DASHBOARD DO ADMIN ==================== */
 @media screen and (max-width: 768px) {
     body { padding: 10px; }
