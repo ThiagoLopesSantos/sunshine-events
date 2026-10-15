@@ -75,7 +75,7 @@ document.getElementById('formLogin').addEventListener('submit', async function(e
     }
 });
 
-// ---------- LÓGICA DE CADASTRO ----------
+/// ---------- LÓGICA DE CADASTRO ----------
 
 // função para ver senha e validar cadastro
 function toggleSenha(idInput, botao) {
@@ -92,14 +92,14 @@ function toggleSenha(idInput, botao) {
 document.getElementById('formCadastro').addEventListener('submit', async function(evento) {
     evento.preventDefault();
     
-    const nome = document.getElementById('cadNome').value;
-    const email = document.getElementById('cadEmail').value;
+    const nomeNoivos = document.getElementById('cadNomeNoivos').value;
+    const emailNoivo = document.getElementById('cadEmailNoivo').value;
+    const emailNoiva = document.getElementById('cadEmailNoiva').value;
     const celular = document.getElementById('cadCelular').value;
-    const nomeEvento = document.getElementById('cadNomeEvento').value;
     const dataEvento = document.getElementById('cadDataEvento').value;
     const senha = document.getElementById('cadSenha').value;
     const confirmaSenha = document.getElementById('cadConfirmaSenha').value;
-    const tokenLicenca = document.getElementById('tokenLicenca').value; // <-- Captura o token digitado no HTML
+    const tokenLicenca = document.getElementById('tokenLicenca').value; 
     const msgBox = document.getElementById('msgCadastro');
 
     // Validação de Segurança da Senha
@@ -124,13 +124,13 @@ document.getElementById('formCadastro').addEventListener('submit', async functio
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
-                nome: nome, 
-                email: email, 
+                nome_noivos: nomeNoivos, 
+                email_noivo: emailNoivo, 
+                email_noiva: emailNoiva,
                 celular: celular, 
-                nome_evento: nomeEvento, 
                 data_evento: dataEvento, 
                 senha: senha,
-                token: tokenLicenca // <-- Enviando o token para o backend validar!
+                token: tokenLicenca 
             })
         });
 
@@ -142,7 +142,7 @@ document.getElementById('formCadastro').addEventListener('submit', async functio
             
             setTimeout(() => {
                 alternarTelas('telaLogin');
-                document.getElementById('loginEmail').value = email; 
+                document.getElementById('loginEmail').value = emailNoivo; 
             }, 2000);
         } else {
             msgBox.className = 'mensagem erro';

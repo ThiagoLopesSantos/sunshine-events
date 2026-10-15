@@ -84,4 +84,4 @@ def deletar_admin(admin_id: int, admin_logado: dict = Depends(obter_super_admin_
     db.delete(alvo)
     db.commit()
 
-    return {"status": "sucesso", "mensagem": f"Administrador {alvo.nome} e todos os seus dados foram removidos com sucesso!"}
+    return {"status": "sucesso", "mensagem": f"Administrador {alvo.nome_noivos} e todos os seus dados foram removidos com sucesso!"}
