@@ -58,7 +58,13 @@ def obter_admin_atual(credentials: HTTPAuthorizationCredentials = Depends(securi
     if admin is None:
         raise credentials_exception
 
-    return {"id": admin.id, "nome": admin.nome, "email": admin.email, "celular": admin.celular}
+    return {
+            "id": admin.id, 
+            "nome_noivos": admin.nome_noivos, 
+            "email_noivo": admin.email_noivo, 
+            "email_noiva": admin.email_noiva, 
+            "celular": admin.celular
+        }
 
 # Dependência Exclusiva para o Super Admin
 def obter_super_admin_atual(credentials: HTTPAuthorizationCredentials = Depends(security)):
