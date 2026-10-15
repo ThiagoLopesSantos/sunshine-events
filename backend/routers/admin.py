@@ -249,3 +249,31 @@ def editar_admin(dados: EditarAdminSchema, admin_logado: dict = Depends(obter_ad
         
     db.commit()
     return {"status": "sucesso", "mensagem": "Perfil atualizado com sucesso!"}
+
+
+@router.delete("/conta/excluir-propria")
+def excluir_propria_conta(dados: dict, admin_logado: dict = Depends(obter_admin_atual), db: Session = Depends(obter_conexao)):
+    senha_informada = dados.get("senha")
+    if not senha_informada:
+        return {"status": "erro", "mensagem": "Por favor, digite sua senha para confirmar a exclusão."}
+
+    admin = db.query(AdministradorModel).filter(AdministradorModel.id == admin_logado["id"]).first()
+    if not admin:
+        return {"status": "erro", "mensagem": "Administrador não encontrado."}
+
+    if not verificar_senha(senha_informada, admin.senha):
+        return {"status": "erro", "mensagem": "Senha incorreta. A exclusão foi cancelada."}
+
+    # Exclusão em cascata (convidados, acompanhantes e o próprio admin)
+    convidados = db.query(ConvidadoModel).filter(ConvidadoModel.admin_id == admin.id).all()
+    for c in convidados:
+        db.query(AcompanhanteModel).filter(AcompanhanteModel.convidado_id == c.id).delete()
+        db.delete(c)
+
+    db.delete(admin)
+    db.commit()
+
+    return {"status": "sucesso", "mensagem": "Conta excluída com sucesso."}
+
+
+

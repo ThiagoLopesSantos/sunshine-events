@@ -126,7 +126,7 @@
             <!-- Modal de Edição de Perfil -->
             <div id="modalPerfil" class="modal-overlay">
                 <div class="modal-content">
-                    <h2>Meu Perfil</h2>
+                    <h2>Meu Perfil / Evento</h2>
                     <form id="formPerfil">
                         <div class="form-group">
                             <label>Nome dos Noivos:</label>
@@ -150,15 +150,27 @@
                         </div>
                         <div class="form-group" style="position: relative;">
                             <label>Nova Senha (deixe em branco para não alterar):</label>
-                            <input type="password" id="perfilSenha" minlength="6">
+                            <input type="password" id="perfilSenha" minlength="6" autocomplete="new-password">
                             <button type="button" onclick="toggleSenha('perfilSenha', this)" style="position: absolute; right: 10px; top: 32px; background: none; border: none; cursor: pointer; width: auto; padding: 5px;">👁️</button>
                         </div>
                         <div class="form-group" style="position: relative;">
                             <label>Confirmar Nova Senha:</label>
-                            <input type="password" id="perfilConfirmaSenha" minlength="6">
+                            <input type="password" id="perfilConfirmaSenha" minlength="6" autocomplete="new-password">
                             <button type="button" onclick="toggleSenha('perfilConfirmaSenha', this)" style="position: absolute; right: 10px; top: 32px; background: none; border: none; cursor: pointer; width: auto; padding: 5px;">👁️</button>
                         </div>
+
+                        <div class="modal-acoes" style="margin-top: 20px;">
+                            <button type="button" class="btn-cancelar" onclick="fecharModalPerfil()">Cancelar</button>
+                            <button type="submit" class="btn-salvar">Salvar Alterações</button>
+                        </div>
                     </form>
+
+                    <!-- Zona de Perigo: Exclusão da própria conta -->
+                    <div style="margin-top: 25px; border-top: 1px solid #ff4757; padding-top: 15px;">
+                        <h3 style="color: #ff4757; font-size: 13px; margin-bottom: 8px;">Zona de Perigo</h3>
+                        <p style="font-size: 11px; color: #666; margin-bottom: 10px;">Excluir a conta removerá permanentemente todos os dados e convidados.</p>
+                        <button type="button" onclick="abrirModalExcluirConta()" style="background-color: #ff4757; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; width: 100%;">Excluir Minha Conta</button>
+                    </div>
                 </div>
             </div>
             

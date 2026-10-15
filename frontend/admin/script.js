@@ -61,6 +61,45 @@ async function carregarConvidados() {
         console.error("Erro na requisição:", erro);
         document.getElementById('tabelaConvidados').innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Erro de conexão com a API.</td></tr>';
     }
+
+    // Cole esta função no script.js
+    function verificarAlertaPendentes(convidados) {
+        const dataEventoSalva = localStorage.getItem('data_evento');
+        if (!dataEventoSalva) return;
+
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+        const dataCasamento = new Date(`${dataEventoSalva}T00:00:00`);
+        
+        const diferencaTempo = dataCasamento.getTime() - hoje.getTime();
+        const diasRestantes = Math.ceil(diferencaTempo / (1000 * 3600 * 24));
+
+        const pendentes = convidados.filter(c => c.status_presenca.toLowerCase() === 'pendente');
+
+        // Se faltarem 7 dias ou menos e houver pendentes
+        if (diasRestantes <= 7 && diasRestantes > 0 && pendentes.length > 0) {
+            let containerAlerta = document.getElementById('alertaPendentesDinamico');
+            
+            // Se o alerta ainda não existe na tela, cria ele logo abaixo do header
+            if (!containerAlerta) {
+                containerAlerta = document.createElement('div');
+                containerAlerta.id = 'alertaPendentesDinamico';
+                containerAlerta.style.cssText = "background: #fff3cd; border-left: 5px solid #ffc107; padding: 15px; margin: 20px 0; border-radius: 4px; color: #856404; display: flex; justify-content: space-between; align-items: center;";
+                
+                const dashboardContainer = document.querySelector('.dashboard-container');
+                const header = document.querySelector('.header');
+                if (dashboardContainer && header) {
+                    dashboardContainer.insertBefore(containerAlerta, header.nextSibling);
+                }
+            }
+
+            containerAlerta.innerHTML = `
+                <span>⚠️ <strong>Atenção:</strong> Faltam apenas ${diasRestantes} dias para o grande dia e você tem <strong>${pendentes.length} convidado(s) pendente(s)</strong>! Use o botão "Lembrete" na tabela para avisá-los no WhatsApp.</span>
+            `;
+        }
+    }
+
+    verificarAlertaPendentes(listaGlobalConvidados);
 }
 
 function atualizarCards(convidados) {
@@ -408,4 +447,26 @@ function copiarLinkConvite() {
         console.error('Erro ao copiar: ', err);
         alert("Não foi possível copiar o link automaticamente.");
     });
+}
+
+function abrirModalExcluirConta() {
+    const senha = prompt("⚠️ ATENÇÃO: Isso apagará TODOS os seus dados e convidados permanentemente.\nPara confirmar, digite sua senha atual:");
+    if (!senha) return;
+
+    fetch(`${API_URL}/admin/conta/excluir-propria`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ senha: senha })
+    })
+    .then(res => res.json())
+    .then(dados => {
+        if (dados.status === 'sucesso') {
+            alert("Conta excluída com sucesso.");
+            localStorage.clear();
+            window.location.href = '../index.html';
+        } else {
+            alert(dados.mensagem || "Erro ao excluir conta.");
+        }
+    })
+    .catch(() => alert("Erro de conexão com o servidor."));
 }

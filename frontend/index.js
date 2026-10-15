@@ -237,3 +237,32 @@ document.getElementById('formNovaSenha').addEventListener('submit', async functi
         msgBox.innerText = "Erro ao conectar com o servidor.";
     }
 });
+
+
+// Função para aplicar máscara de telefone em tempo real e bloquear letras
+function aplicarMascaraTelefone(inputId) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+
+    input.addEventListener('input', function (e) {
+        let valor = e.target.value.replace(/\D/g, ''); // Remove tudo que não é número
+        if (valor.length > 11) valor = valor.substring(0, 11); // Trava em 11 dígitos
+
+        // Formata: (XX) XXXXX-XXXX ou (XX) XXXX-XXXX
+        if (valor.length > 6) {
+            valor = `(${valor.substring(0, 2)}) ${valor.substring(2, 7)}-${valor.substring(7)}`;
+        } else if (valor.length > 2) {
+            valor = `(${valor.substring(0, 2)}) ${valor.substring(2)}`;
+        } else if (valor.length > 0) {
+            valor = `(${valor}`;
+        }
+        e.target.value = valor;
+    });
+}
+
+// Aplica automaticamente nos campos de celular existentes nas telas
+window.addEventListener('DOMContentLoaded', () => {
+    aplicarMascaraTelefone('celular');       // Modal de convidado
+    aplicarMascaraTelefone('cadCelular');    // Tela de cadastro
+    aplicarMascaraTelefone('perfilCelular'); // Modal de perfil
+});
