@@ -77,16 +77,15 @@ def login_admin(credenciais: LoginSchema, db: Session = Depends(obter_conexao)):
     if not verificar_senha(credenciais.senha, admin_encontrado.senha):
         return {"status": "erro", "mensagem": "Senha incorreta!"}
 
-    # Gera o token usando o e-mail do noivo como referência principal de sub
     token_acesso = criar_token_acesso(dados={"sub": admin_encontrado.email_noivo})
 
     return {
         "status": "sucesso",
-        "mensagem": f"Login realizado com sucesso! Bem-vindo de volta, {admin_encontrado.nome_noivos}.",
+        "mensagem": f"Login realizado com sucesso! Bem-vindos de volta, {admin_encontrado.nome_noivos}.",
         "access_token": token_acesso,
         "token_type": "bearer",
         "admin_id": admin_encontrado.id,
-        "nome_evento": admin_encontrado.noivos,
+        "nome_evento": admin_encontrado.nome_noivos,
         "data_evento": admin_encontrado.data_evento,
     }
 
