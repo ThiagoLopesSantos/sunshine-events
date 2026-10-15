@@ -337,67 +337,151 @@ footer {
 .tag-familia { background-color: #e8f8f5; color: var(--success-color); }
 .tag-vip { background-color: #fbeee6; color: #d35400; }
 
-/* ==================== MELHORIA MOBILE: TABELA EM CARDS ==================== */
+/* ==================== RESPONSIVIDADE MOBILE: DESIGN PREMIUM & ELEGANTE ==================== */
 @media screen and (max-width: 768px) {
-    /* Esconde o cabeçalho tradicional da tabela no celular */
+    body { 
+        padding: 12px; 
+    }
+
+    .dashboard-container {
+        width: 100% !important;
+        padding: 0;
+    }
+
+    /* Cabeçalho Principal */
+    .header {
+        flex-direction: column;
+        padding: 20px 16px;
+        gap: 16px;
+        text-align: center;
+        border-radius: 14px;
+    }
+
+    .header-brand-info {
+        width: 100%;
+    }
+
+    .header-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Divide os botões lado a lado para otimizar espaço */
+        gap: 8px;
+    }
+
+    .header-actions button {
+        width: 100%;
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+
+    .btn-sair {
+        grid-column: span 2; /* O botão sair ocupa a largura inteira embaixo */
+    }
+
+    /* Bloco do Link do Convite */
+    .linkConvite {
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px;
+        text-align: center;
+        border-radius: 14px;
+    }
+
+    .linkConvite-info {
+        width: 100%;
+        word-break: break-all; /* Garante que o link longo quebre a linha sem estourar o card */
+    }
+
+    .linkConvite button {
+        width: 100%;
+        padding: 12px;
+    }
+
+    /* Barra de Controles e Filtros */
+    .controles-tabela {
+        flex-direction: column;
+        gap: 10px;
+        padding: 16px;
+        border-radius: 14px;
+    }
+
+    .controles-tabela input, 
+    .controles-tabela select,
+    .btn-exportar {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Transforma a tabela em Cards Modernos Estilo App */
     table thead {
         display: none;
     }
 
-    /* Transforma a tabela, o corpo e as linhas em blocos empilhados */
     table, table tbody, table tr, table td {
         display: block;
         width: 100%;
         box-sizing: border-box;
     }
 
-    /* Cada convidado vira um card separado */
     table tr {
         background: var(--card-bg);
-        margin-bottom: 15px;
-        padding: 15px;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        margin-bottom: 16px;
+        padding: 18px;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
         border: 1px solid var(--border-color);
     }
 
-    /* Cada célula vira uma linha organizada com rótulo */
     table td {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 8px 0;
-        border-bottom: 1px solid #f1f2f6;
+        padding: 10px 0;
+        border-bottom: 1px solid #f7f9fa;
         text-align: right;
+        font-size: 13px;
     }
 
-    /* Remove a bordinha da última célula (ações) */
+    /* Nome do Convidado em destaque maior no topo do card */
+    table td:nth-child(1) {
+        font-size: 15px;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 12px;
+        margin-bottom: 4px;
+    }
+
     table td:last-child {
         border-bottom: none;
-        padding-top: 12px;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    /* Cria um rótulo automático baseado na ordem para identificar o campo */
-    table td:nth-child(1):before { content: "Convidado:"; font-weight: 600; color: var(--text-muted); }
-    table td:nth-child(2):before { content: "Celular:"; font-weight: 600; color: var(--text-muted); }
-    table td:nth-child(3):before { content: "Acompanhantes:"; font-weight: 600; color: var(--text-muted); }
-    table td:nth-child(4):before { content: "Categoria:"; font-weight: 600; color: var(--text-muted); }
-    table td:nth-child(5):before { content: "Status:"; font-weight: 600; color: var(--text-muted); }
-
-    /* Ajusta os botões de ação na célula final para ficarem em grade/lado a lado */
-    table td:last-child {
+        padding-top: 14px;
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 8px;
     }
 
+    /* Rótulos elegantes à esquerda */
+    table td:nth-child(1):before { content: "Convidado"; font-weight: 600; color: var(--text-muted); font-size: 12px; text-transform: uppercase; }
+    table td:nth-child(2):before { content: "Celular"; font-weight: 600; color: var(--text-muted); font-size: 12px; text-transform: uppercase; }
+    table td:nth-child(3):before { content: "Acompanhantes"; font-weight: 600; color: var(--text-muted); font-size: 12px; text-transform: uppercase; }
+    table td:nth-child(4):before { content: "Categoria"; font-weight: 600; color: var(--text-muted); font-size: 12px; text-transform: uppercase; }
+    table td:nth-child(5):before { content: "Status"; font-weight: 600; color: var(--text-muted); font-size: 12px; text-transform: uppercase; }
+
+    /* Botões de Ação dentro do Card perfeitamente distribuídos */
     table td:last-child a, 
     table td:last-child button {
         width: 100% !important;
         margin: 0 !important;
         text-align: center;
         justify-content: center;
+        padding: 10px;
+        font-size: 12px;
+        border-radius: 8px;
+    }
+
+    /* Modais adaptados para o telemóvel */
+    .modal-content {
+        width: 92% !important;
+        padding: 24px !important;
+        border-radius: 18px;
+        box-sizing: border-box;
     }
 }
