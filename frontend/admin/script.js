@@ -132,11 +132,12 @@ function renderizarTabela(convidados) {
             <td><strong>${c.nome_completo}</strong></td>
             <td>${c.celular}</td>
             <td>${descAcomp}</td>
+            <td><span class="tag-categoria ${tagClass}">${c.categoria || 'Geral'}</span></td>
             <td><span class="status ${classeStatus}">${c.status_presenca.toUpperCase()}</span></td>
             <td>
                 <a href="https://api.whatsapp.com/send?phone=55${c.celular.replace(/\D/g, '')}&text=${msgConvite}" target="_blank" class="btn-acao" style="background-color: #25d366; color: white; padding: 6px 10px; text-decoration: none; border-radius: 4px; font-size: 12px; display: inline-block; margin-right: 4px;">📲 Convite</a>
                 <a href="https://api.whatsapp.com/send?phone=55${c.celular.replace(/\D/g, '')}&text=${msgLembrete}" target="_blank" class="btn-acao" style="background-color: #128c7e; color: white; padding: 6px 10px; text-decoration: none; border-radius: 4px; font-size: 12px; display: inline-block; margin-right: 4px;">⏰ Lembrete</a>
-                <button class="btn-acao btn-editar" onclick="abrirModal(${c.id}, '${c.nome_completo}', '${c.celular}', ${c.limite_acompanhantes}, '${c.categoria || 'Geral'})">Editar</button>
+                <button class="btn-acao btn-editar" onclick="abrirModal(${c.id}, '${c.nome_completo}', '${c.celular}', ${c.limite_acompanhantes}, '${c.categoria || 'Geral'}')">Editar</button>
                 <button class="btn-acao btn-excluir" onclick="excluirConvidado(${c.id}, '${c.nome_completo}')">Excluir</button>
             </td>
         `;
