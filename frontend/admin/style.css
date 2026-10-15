@@ -468,8 +468,7 @@ footer {
     /* Botões de Ação dentro do Card perfeitamente distribuídos */
     table td:last-child a, 
     table td:last-child button {
-        width: 100% !important;
-        margin: 0 !important;
+        margin: 0;
         text-align: center;
         justify-content: center;
         padding: 10px;
