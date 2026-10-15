@@ -14,7 +14,7 @@ def obter_info_evento(admin_id: int, db: Session = Depends(obter_conexao)):
         
     return {
         "status": "sucesso",
-        "nome_evento": admin.nome_evento,
+        "nome_evento": admin.nome_noivos,
         "data_evento": admin.data_evento
     }
 
