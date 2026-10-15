@@ -3,7 +3,7 @@ import secrets
 from datetime import datetime, timedelta
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from ..database import obter_conexao, AdministradorModel, ConvidadoModel, AcompanhanteModel
+from ..database import obter_conexao, AdministradorModel, ConvidadoModel, AcompanhanteModel, TokenModel
 from ..schemas import AdminSchema, LoginSchema, ConvidadosSchema, EditarConvidadoSchema, EditarAdminSchema
 from ..auth import hash_senha, verificar_senha, criar_token_acesso, obter_admin_atual
 
@@ -11,8 +11,6 @@ router = APIRouter(prefix="/admin", tags=["Administrador"])
 
 def limpar_celular(celular: str) -> str:
     return re.sub(r'\D', '', celular)
-
-from ..database import TokenModel # Certifique-se de importar o TokenModel
 
 @router.post("/cadastrar")
 def cadastrar_admin(admin: AdminSchema, db: Session = Depends(obter_conexao)):
@@ -31,10 +29,7 @@ def cadastrar_admin(admin: AdminSchema, db: Session = Depends(obter_conexao)):
         if not token_obj:
             return {"status": "erro", "mensagem": "Token de ativação inválido ou já utilizado."}
 
-        # 3. Define se é o Super Admin com base no email fornecido
-        eh_super = (admin.email.strip().lower() == "thiagodev8343@gmail.com")
-
-        # 4. Cria o novo administrador
+        # 3. Cria o novo administrador
         senha_criptografada = hash_senha(admin.senha)
         novo_admin = AdministradorModel(
             nome_noivos=admin.nome_noivos,
@@ -46,7 +41,7 @@ def cadastrar_admin(admin: AdminSchema, db: Session = Depends(obter_conexao)):
         )
         db.add(novo_admin)
 
-        # 5. Marca o token como usado
+        # 4. Marca o token como usado
         token_obj.usado = True
         token_obj.usado_por_email = admin.email_noivo
 
@@ -65,7 +60,6 @@ def cadastrar_admin(admin: AdminSchema, db: Session = Depends(obter_conexao)):
 
 @router.post("/login")
 def login_admin(credenciais: LoginSchema, db: Session = Depends(obter_conexao)):
-    # Permite buscar tanto pelo e-mail do noivo quanto pelo e-mail da noiva
     admin_encontrado = db.query(AdministradorModel).filter(
         (AdministradorModel.email_noivo == credenciais.email) | 
         (AdministradorModel.email_noiva == credenciais.email)
@@ -152,7 +146,7 @@ def listar_convidados(admin_logado: dict = Depends(obter_admin_atual), db: Sessi
             "celular": c.celular,
             "status_presenca": c.status_presenca, 
             "limite_acompanhantes": c.limite_acompanhantes,
-            "nome_acompanhante": acompanhantes_lista          
+            "nome_acompanhante": acompanhantes_lista         
         })
 
     return {
@@ -198,7 +192,7 @@ def verificar_recuperacao(dados: dict, db: Session = Depends(obter_conexao)):
     celular = dados.get("celular")
     
     admin = db.query(AdministradorModel).filter(
-        AdministradorModel.email == email,
+        (AdministradorModel.email_noivo == email) | (AdministradorModel.email_noiva == email),
         AdministradorModel.celular == celular
     ).first()
     
@@ -215,7 +209,10 @@ def redefinir_senha(dados: dict, db: Session = Depends(obter_conexao)):
     if not email or not nova_senha:
         return {"status": "erro", "mensagem": "Dados incompletos."}
         
-    admin = db.query(AdministradorModel).filter(AdministradorModel.email == email).first()
+    admin = db.query(AdministradorModel).filter(
+        (AdministradorModel.email_noivo == email) | (AdministradorModel.email_noiva == email)
+    ).first()
+    
     if not admin:
         return {"status": "erro", "mensagem": "Administrador não encontrado."}
         
@@ -231,10 +228,10 @@ def obter_perfil(admin_logado: dict = Depends(obter_admin_atual), db: Session = 
     return {
         "status": "sucesso",
         "perfil": {
-            "nome": admin.nome,
-            "email": admin.email,
+            "nome_noivos": admin.nome_noivos,
+            "email_noivo": admin.email_noivo,
+            "email_noiva": admin.email_noiva,
             "celular": admin.celular,
-            "nome_evento": admin.nome_evento,
             "data_evento": admin.data_evento
         }
     }
@@ -243,9 +240,8 @@ def obter_perfil(admin_logado: dict = Depends(obter_admin_atual), db: Session = 
 def editar_admin(dados: EditarAdminSchema, admin_logado: dict = Depends(obter_admin_atual), db: Session = Depends(obter_conexao)):
     admin = db.query(AdministradorModel).filter(AdministradorModel.id == admin_logado["id"]).first()
     
-    admin.nome = dados.nome
+    admin.nome_noivos = dados.nome_noivos
     admin.celular = dados.celular
-    admin.nome_evento = dados.nome_evento
     admin.data_evento = dados.data_evento
     
     if dados.senha:
@@ -253,86 +249,3 @@ def editar_admin(dados: EditarAdminSchema, admin_logado: dict = Depends(obter_ad
         
     db.commit()
     return {"status": "sucesso", "mensagem": "Perfil atualizado com sucesso!"}
-
-
-# ============= Rotas exclusivas para o Super Admin ================== #
-
-@router.post("/master/gerar-token")
-def gerar_token_master(admin_logado: dict = Depends(obter_admin_atual), db: Session = Depends(obter_conexao)):
-    # Valida se o usuário logado é o Super Admin
-    admin = db.query(AdministradorModel).filter(AdministradorModel.id == admin_logado["id"]).first()
-    if not admin or not admin.is_superadmin:
-        raise HTTPException(status_code=403, detail="Acesso negado. Apenas o Super Admin pode gerar tokens.")
-
-    # Gera um token único e legível (ex: SUNSHINE-X7K9P2)
-    novo_codigo = f"SUNSHINE-{secrets.token_hex(3).upper()}"
-    
-    token_db = TokenModel(token=novo_codigo, usado=False)
-    db.add(token_db)
-    db.commit()
-
-    return {
-        "status": "sucesso",
-        "token_gerado": novo_codigo,
-        "mensagem": "Token de licença gerado com sucesso!"
-    }
-
-@router.get("/master/listar-admins")
-def listar_admins_master(admin_logado: dict = Depends(obter_admin_atual), db: Session = Depends(obter_conexao)):
-    admin = db.query(AdministradorModel).filter(AdministradorModel.id == admin_logado["id"]).first()
-    if not admin or not admin.is_superadmin:
-        raise HTTPException(status_code=403, detail="Acesso negado.")
-
-    admins = db.query(AdministradorModel).all()
-    hoje = datetime.utcnow().date()
-    lista = []
-
-    for a in admins:
-        expirado = False
-        if a.data_evento:
-            try:
-                # Converte a data do evento (ex: "2026-10-12") para objeto date
-                data_ev = datetime.strptime(a.data_evento, "%Y-%m-%d").date()
-                limite_expiracao = data_ev + timedelta(days=2) # 2 dias após o evento
-                if hoje > limite_expiracao:
-                    expirado = True
-            except Exception:
-                pass
-
-        lista.append({
-            "id": a.id,
-            "nome": a.nome,
-            "email": a.email,
-            "celular": a.celular,
-            "evento": a.nome_evento,
-            "data": a.data_evento,
-            "is_superadmin": a.is_superadmin,
-            "expirado": expirado # True se passou de 2 dias da data
-        })
-        
-@router.delete("/master/admin/{admin_id}")
-def deletar_admin_master(admin_id: int, admin_logado: dict = Depends(obter_admin_atual), db: Session = Depends(obter_conexao)):
-    # 1. Valida se quem está a chamar é o Super Admin
-    super_admin = db.query(AdministradorModel).filter(AdministradorModel.id == admin_logado["id"]).first()
-    if not super_admin or not super_admin.is_superadmin:
-        raise HTTPException(status_code=403, detail="Acesso negado.")
-
-    # 2. Busca o admin alvo
-    alvo = db.query(AdministradorModel).filter(AdministradorModel.id == admin_id).first()
-    if not alvo:
-        return {"status": "erro", "mensagem": "Administrador não encontrado."}
-    
-    if alvo.is_superadmin:
-        return {"status": "erro", "mensagem": "Não é permitido excluir o Super Admin principal."}
-
-    # 3. Exclusão em cascata: Apaga os convidados e acompanhantes do admin antes de apagar o admin
-    convidados = db.query(ConvidadoModel).filter(ConvidadoModel.admin_id == alvo.id).all()
-    for c in convidados:
-        db.query(AcompanhanteModel).filter(AcompanhanteModel.convidado_id == c.id).delete()
-        db.delete(c)
-    
-    # 4. Apaga o administrador
-    db.delete(alvo)
-    db.commit()
-
-    return {"status": "sucesso", "mensagem": f"Administrador {alvo.nome} e todos os seus dados foram removidos com sucesso!"}
