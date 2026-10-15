@@ -50,7 +50,10 @@ def obter_admin_atual(credentials: HTTPAuthorizationCredentials = Depends(securi
         raise credentials_exception
 
     with obter_conexao_contexto() as db:
-        admin = db.query(AdministradorModel).filter(AdministradorModel.email == email).first()
+        admin = db.query(AdministradorModel).filter(
+    (AdministradorModel.email_noivo == email) | 
+    (AdministradorModel.email_noiva == email)
+).first()
 
     if admin is None:
         raise credentials_exception
