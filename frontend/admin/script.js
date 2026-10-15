@@ -55,11 +55,11 @@ async function carregarConvidados() {
             atualizarCards(listaGlobalConvidados);
             renderizarTabela(listaGlobalConvidados);
         } else {
-            document.getElementById('tabelaConvidados').innerHTML = '<tr><td colspan="5" style="text-align: center; color: red;">Erro ao carregar dados.</td></tr>';
+            document.getElementById('tabelaConvidados').innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Erro ao carregar dados.</td></tr>';
         }
     } catch (erro) {
         console.error("Erro na requisição:", erro);
-        document.getElementById('tabelaConvidados').innerHTML = '<tr><td colspan="5" style="text-align: center; color: red;">Erro de conexão com a API.</td></tr>';
+        document.getElementById('tabelaConvidados').innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Erro de conexão com a API.</td></tr>';
     }
 }
 
@@ -96,7 +96,7 @@ function renderizarTabela(convidados) {
     tbody.innerHTML = '';
 
     if (convidados.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Nenhum convidado cadastrado.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Nenhum convidado cadastrado.</td></tr>';
         return;
     }
 
@@ -111,6 +111,12 @@ function renderizarTabela(convidados) {
             const nomes = c.nome_acompanhante.map(a => `${a.nome} (${a.idade}a)`).join(', ');
             descAcomp = `<b>Confirmados:</b> ${nomes}`;
         }
+
+        // BLOCO DE TAGS
+        let tagClass = 'tag-geral';
+        if (c.categoria === 'Padrinho/Madrinha') tagClass = 'tag-padrinho';
+        else if (c.categoria === 'Pais/Familia') tagClass = 'tag-familia';
+        else if (c.categoria === 'VIP') tagClass = 'tag-vip';
 
         // Gera o link personalizado com o ID do admin logado
         const adminId = localStorage.getItem('admin_id') || 1;
@@ -130,7 +136,7 @@ function renderizarTabela(convidados) {
             <td>
                 <a href="https://api.whatsapp.com/send?phone=55${c.celular.replace(/\D/g, '')}&text=${msgConvite}" target="_blank" class="btn-acao" style="background-color: #25d366; color: white; padding: 6px 10px; text-decoration: none; border-radius: 4px; font-size: 12px; display: inline-block; margin-right: 4px;">📲 Convite</a>
                 <a href="https://api.whatsapp.com/send?phone=55${c.celular.replace(/\D/g, '')}&text=${msgLembrete}" target="_blank" class="btn-acao" style="background-color: #128c7e; color: white; padding: 6px 10px; text-decoration: none; border-radius: 4px; font-size: 12px; display: inline-block; margin-right: 4px;">⏰ Lembrete</a>
-                <button class="btn-acao btn-editar" onclick="abrirModal(${c.id}, '${c.nome_completo}', '${c.celular}', ${c.limite_acompanhantes})">Editar</button>
+                <button class="btn-acao btn-editar" onclick="abrirModal(${c.id}, '${c.nome_completo}', '${c.celular}', ${c.limite_acompanhantes}, '${c.categoria || 'Geral'})">Editar</button>
                 <button class="btn-acao btn-excluir" onclick="excluirConvidado(${c.id}, '${c.nome_completo}')">Excluir</button>
             </td>
         `;
@@ -224,11 +230,12 @@ async function excluirConvidado(id, nome) {
     }
 }
 
-function abrirModal(id = '', nome = '', celular = '', limite = 0) {
+function abrirModal(id = '', nome = '', celular = '', limite = 0, categoria = 'Geral') {
     document.getElementById('convidadoId').value = id;
     document.getElementById('nome').value = nome;
     document.getElementById('celular').value = celular;
     document.getElementById('limite').value = limite;
+    document.getElementById('categoria').value = categoria || 'Geral';
     document.getElementById('modalTitulo').innerText = id ? 'Editar Convidado' : 'Novo Convidado';
     document.getElementById('modalConvidado').classList.add('ativo');
 }
@@ -245,7 +252,8 @@ document.getElementById('formConvidado').addEventListener('submit', async functi
     const payload = {
         nome_completo: document.getElementById('nome').value,
         celular: document.getElementById('celular').value,
-        limite_acompanhantes: parseInt(document.getElementById('limite').value)
+        limite_acompanhantes: parseInt(document.getElementById('limite').value),
+        categoria: document.getElementById('categoria').value
     };
 
     const metodo = id ? 'PUT' : 'POST';
