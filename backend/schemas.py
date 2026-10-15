@@ -3,11 +3,11 @@ from typing import Optional, List
 
 # Schemas (Pydantic)
 class AdminSchema(BaseModel):
-    nome: str
-    email: str
+    nome_noivos: str
+    email_noivo: str
+    email_noiva: str
     celular: str
     senha: str 
-    nome_evento: str
     data_evento: str
     token: str
 

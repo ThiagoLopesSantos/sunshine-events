@@ -129,33 +129,34 @@
                     <h2>Meu Perfil</h2>
                     <form id="formPerfil">
                         <div class="form-group">
-                            <label>E-mail (Login):</label>
-                            <input type="email" id="perfilEmail" disabled>
+                            <label>Nome dos Noivos:</label>
+                            <input type="text" id="perfilNomeNoivos" required>
                         </div>
                         <div class="form-group">
-                            <label>Nome Completo:</label>
-                            <input type="text" id="perfilNome" required>
+                            <label>E-mail do Noivo:</label>
+                            <input type="email" id="perfilEmailNoivo" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>E-mail da Noiva:</label>
+                            <input type="email" id="perfilEmailNoiva" disabled>
                         </div>
                         <div class="form-group">
                             <label>Celular:</label>
                             <input type="text" id="perfilCelular" required>
                         </div>
                         <div class="form-group">
-                            <label>Nome do Evento:</label>
-                            <input type="text" id="perfilNomeEvento" required>
-                        </div>
-                        <div class="form-group">
                             <label>Data do Evento:</label>
                             <input type="date" id="perfilDataEvento" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="position: relative;">
                             <label>Nova Senha (deixe em branco para não alterar):</label>
-                            <input type="password" id="perfilSenha" autocomplete="new-password">
+                            <input type="password" id="perfilSenha" minlength="6">
+                            <button type="button" onclick="toggleSenha('perfilSenha', this)" style="position: absolute; right: 10px; top: 32px; background: none; border: none; cursor: pointer; width: auto; padding: 5px;">👁️</button>
                         </div>
-    
-                        <div class="modal-acoes">
-                            <button type="button" class="btn-cancelar" onclick="fecharModalPerfil()">Cancelar</button>
-                            <button type="submit" class="btn-salvar">Salvar Alterações</button>
+                        <div class="form-group" style="position: relative;">
+                            <label>Confirmar Nova Senha:</label>
+                            <input type="password" id="perfilConfirmaSenha" minlength="6">
+                            <button type="button" onclick="toggleSenha('perfilConfirmaSenha', this)" style="position: absolute; right: 10px; top: 32px; background: none; border: none; cursor: pointer; width: auto; padding: 5px;">👁️</button>
                         </div>
                     </form>
                 </div>

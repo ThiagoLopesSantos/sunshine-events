@@ -316,14 +316,15 @@ async function abrirModalPerfil() {
         const dados = await resposta.json();
         
         if (resposta.ok && dados.status === 'sucesso') {
-            document.getElementById('perfilNome').value = dados.perfil.nome;
-            document.getElementById('perfilEmail').value = dados.perfil.email;
+            document.getElementById('perfilNomeNoivos').value = dados.perfil.nome_noivos;
+            document.getElementById('perfilEmailNoivo').value = dados.perfil.email_noivo;
+            document.getElementById('perfilEmailNoiva').value = dados.perfil.email_noiva;
             document.getElementById('perfilCelular').value = dados.perfil.celular;
-            document.getElementById('perfilNomeEvento').value = dados.perfil.nome_evento;
             document.getElementById('perfilDataEvento').value = dados.perfil.data_evento;
-            document.getElementById('perfilSenha').value = ''; // Sempre começa vazio
+            document.getElementById('perfilSenha').value = ''; 
+            document.getElementById('perfilConfirmaSenha').value = '';
             
-            document.getElementById('modalPerfil').classList.add('ativo');
+            document.getElementById('modalPerfil').classList.add('ativo');;
         } else {
             alert("Erro ao carregar os dados do perfil.");
         }
@@ -338,13 +339,22 @@ function fecharModalPerfil() {
 
 document.getElementById('formPerfil').addEventListener('submit', async function(evento) {
     evento.preventDefault();
+
+    const senhaNova = document.getElementById('perfilSenha').value;
+    const senhaConfirma = document.getElementById('perfilConfirmaSenha').value;
+
+    if (senhaNova && senhaNova !== senhaConfirma) {
+        alert("A nova senha e a confirmação não coincidem.");
+        return;
+    }
     
     const payload = {
-        nome: document.getElementById('perfilNome').value,
+        nome_noivos: document.getElementById('perfilNomeNoivos').value,
+        email_noivo: document.getElementById('perfilEmailNoivo').value,
+        email_noiva: document.getElementById('perfilEmailNoiva').value,
         celular: document.getElementById('perfilCelular').value,
-        nome_evento: document.getElementById('perfilNomeEvento').value,
         data_evento: document.getElementById('perfilDataEvento').value,
-        senha: document.getElementById('perfilSenha').value || null // Envia null se estiver vazio
+        senha: senhaNova || null 
     };
 
     const resposta = await fetch(`${API_URL}/admin/editar`, {
@@ -357,7 +367,7 @@ document.getElementById('formPerfil').addEventListener('submit', async function(
 
     if (resposta.ok && dados.status === 'sucesso') {
         // Atualiza os dados no localStorage para o relógio da dashboard atualizar
-        localStorage.setItem('nome_evento', payload.nome_evento);
+        localStorage.setItem('nome_evento', payload.nome_noivos);
         localStorage.setItem('data_evento', payload.data_evento);
         
         fecharModalPerfil();

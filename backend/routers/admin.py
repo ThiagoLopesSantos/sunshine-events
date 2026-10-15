@@ -17,10 +17,14 @@ from ..database import TokenModel # Certifique-se de importar o TokenModel
 @router.post("/cadastrar")
 def cadastrar_admin(admin: AdminSchema, db: Session = Depends(obter_conexao)):
     try:
-        # 1. Verifica se o email já existe
-        email_existente = db.query(AdministradorModel).filter(AdministradorModel.email == admin.email).first()
+        # 1. Verifica se qualquer um dos emails (do noivo ou da noiva) já existe
+        email_existente = db.query(AdministradorModel).filter(
+            (AdministradorModel.email_noivo == admin.email_noivo) | 
+            (AdministradorModel.email_noiva == admin.email_noiva)
+        ).first()
+        
         if email_existente:
-            return {"status": "erro", "mensagem": "Este email já está cadastrado no sistema."}
+            return {"status": "erro", "mensagem": "Um dos e-mails informados já está cadastrado no sistema."}
 
         # 2. Validação do Token de Licença
         token_obj = db.query(TokenModel).filter(TokenModel.token == admin.token, TokenModel.usado == False).first()
@@ -33,24 +37,24 @@ def cadastrar_admin(admin: AdminSchema, db: Session = Depends(obter_conexao)):
         # 4. Cria o novo administrador
         senha_criptografada = hash_senha(admin.senha)
         novo_admin = AdministradorModel(
-            nome=admin.nome,
-            email=admin.email,
+            nome_noivos=admin.nome_noivos,
+            email_noivo=admin.email_noivo,
+            email_noiva=admin.email_noiva,
             celular=admin.celular,
             senha=senha_criptografada,
-            nome_evento=admin.nome_evento,
             data_evento=admin.data_evento,
         )
         db.add(novo_admin)
 
         # 5. Marca o token como usado
         token_obj.usado = True
-        token_obj.usado_por_email = admin.email
+        token_obj.usado_por_email = admin.email_noivo
 
         db.commit()
 
         return {
             "status": "sucesso",
-            "mensagem": f"Administrador {admin.nome} cadastrado com sucesso!",
+            "mensagem": f"Conta de {admin.nome_noivos} cadastrada com sucesso!",
         }
     except Exception as e:
         db.rollback()
@@ -61,7 +65,11 @@ def cadastrar_admin(admin: AdminSchema, db: Session = Depends(obter_conexao)):
 
 @router.post("/login")
 def login_admin(credenciais: LoginSchema, db: Session = Depends(obter_conexao)):
-    admin_encontrado = db.query(AdministradorModel).filter(AdministradorModel.email == credenciais.email).first()
+    # Permite buscar tanto pelo e-mail do noivo quanto pelo e-mail da noiva
+    admin_encontrado = db.query(AdministradorModel).filter(
+        (AdministradorModel.email_noivo == credenciais.email) | 
+        (AdministradorModel.email_noiva == credenciais.email)
+    ).first()
 
     if not admin_encontrado:
         return {"status": "erro", "mensagem": "E-mail não encontrado!"}
@@ -69,15 +77,16 @@ def login_admin(credenciais: LoginSchema, db: Session = Depends(obter_conexao)):
     if not verificar_senha(credenciais.senha, admin_encontrado.senha):
         return {"status": "erro", "mensagem": "Senha incorreta!"}
 
-    token_acesso = criar_token_acesso(dados={"sub": admin_encontrado.email})
+    # Gera o token usando o e-mail do noivo como referência principal de sub
+    token_acesso = criar_token_acesso(dados={"sub": admin_encontrado.email_noivo})
 
     return {
         "status": "sucesso",
-        "mensagem": f"Login realizado com sucesso! Bem-vindo de volta, {admin_encontrado.nome}.",
+        "mensagem": f"Login realizado com sucesso! Bem-vindo de volta, {admin_encontrado.nome_noivos}.",
         "access_token": token_acesso,
         "token_type": "bearer",
         "admin_id": admin_encontrado.id,
-        "nome_evento": admin_encontrado.nome_evento,
+        "nome_evento": admin_encontrado.noivos,
         "data_evento": admin_encontrado.data_evento,
     }
 

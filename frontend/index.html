@@ -39,32 +39,35 @@
                 <h2>Novo Administrador</h2>
                 <form id="formCadastro">
                     <div class="form-group">
-                        <label>Nome:</label>
-                        <input type="text" id="cadNome" required>
+                        <label>Nome dos Noivos (Ex: Jéssica & Thiago):</label>
+                        <input type="text" id="cadNomeNoivos" required>
                     </div>
                     <div class="form-group">
-                        <label>E-mail:</label>
-                        <input type="email" id="cadEmail" required>
+                        <label>E-mail do Noivo:</label>
+                        <input type="email" id="cadEmailNoivo" required>
                     </div>
                     <div class="form-group">
-                        <label>Celular:</label>
+                        <label>E-mail da Noiva:</label>
+                        <input type="email" id="cadEmailNoiva" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Celular de Contato:</label>
                         <input type="text" id="cadCelular" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Nome do Evento (Ex: noiva & noivo):</label>
-                        <input type="text" id="cadNomeEvento" required>
                     </div>
                     <div class="form-group">
                         <label>Data do Evento:</label>
                         <input type="date" id="cadDataEvento" required>
                     </div>
-                    <div class="form-group">
+                    <!-- Grupo de Senha com Botão de Visualizar -->
+                    <div class="form-group" style="position: relative;">
                         <label>Senha (Mínimo de 6 caracteres):</label>
                         <input type="password" id="cadSenha" minlength="6" required>
+                        <button type="button" onclick="toggleSenha('cadSenha', this)" style="position: absolute; right: 10px; top: 32px; background: none; border: none; cursor: pointer; width: auto; padding: 5px;">👁️</button>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" style="position: relative;">
                         <label>Confirmar Senha:</label>
-                        <input type="password" id="cadConfirmaSenha" minlength="6" required>                
+                        <input type="password" id="cadConfirmaSenha" minlength="6" required>
+                        <button type="button" onclick="toggleSenha('cadConfirmaSenha', this)" style="position: absolute; right: 10px; top: 32px; background: none; border: none; cursor: pointer; width: auto; padding: 5px;">👁️</button>
                     </div>
                     <!-- Campo para o Token de Licença -->
                     <div class="form-group">

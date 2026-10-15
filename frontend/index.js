@@ -76,6 +76,19 @@ document.getElementById('formLogin').addEventListener('submit', async function(e
 });
 
 // ---------- LÓGICA DE CADASTRO ----------
+
+// função para ver senha e validar cadastro
+function toggleSenha(idInput, botao) {
+    const input = document.getElementById(idInput);
+    if (input.type === "password") {
+        input.type = "text";
+        botao.innerText = " ocultar ";
+    } else {
+        input.type = "password";
+        botao.innerText = "👁️";
+    }
+}
+
 document.getElementById('formCadastro').addEventListener('submit', async function(evento) {
     evento.preventDefault();
     

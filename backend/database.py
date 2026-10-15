@@ -54,11 +54,11 @@ class SuperAdminModel(Base):
 class AdministradorModel(Base):
     __tablename__ = "administradores"
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    nome = Column(String, nullable=False)
-    email = Column(String, unique=True, index=True, nullable=False)
+    nome_noivos = Column(String, nullable=False)
+    email_noivo = Column(String, unique=True, index=True, nullable=False)
+    email_noiva = Column(String, unique=True, index=True, nullable=False)
     celular = Column(String, nullable=False)
     senha = Column(String, nullable=False)
-    nome_evento = Column(String, nullable=True)
     data_evento = Column(String, nullable=True)
 
 class TokenModel(Base):
