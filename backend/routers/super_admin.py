@@ -62,7 +62,7 @@ def listar_admins(admin_logado: dict = Depends(obter_super_admin_atual), db: Ses
             "nome": a.nome_noivos, 
             "email": a.email_noivo, 
             "celular": a.celular,
-            "evento": a.noivos,
+            "evento": a.nome_noivos,
             "data": a.data_evento,
             "expirado": expirado
         })
