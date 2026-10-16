@@ -55,7 +55,7 @@ async function carregarConvidados() {
             atualizarCards(listaGlobalConvidados);
             renderizarTabela(listaGlobalConvidados);
 
-            verificarAlertaPendentes(listaGlobalConvidados);
+            verificarAlertaPendentes(listaGlobalConvidados);                
         } else {
             document.getElementById('tabelaConvidados').innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Erro ao carregar dados.</td></tr>';
         }

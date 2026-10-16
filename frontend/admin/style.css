@@ -339,11 +339,6 @@ footer {
 .tag-familia { background-color: #e8f8f5; color: var(--success-color); }
 .tag-vip { background-color: #fbeee6; color: #d35400; }
 
-
-.escondido {
-    display: none !important;
-}
-
 /* ==================== RESPONSIVIDADE MOBILE: DESIGN PREMIUM & ELEGANTE ==================== */
 @media screen and (max-width: 768px) {
     body { 
