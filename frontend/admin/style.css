@@ -275,6 +275,8 @@ tr:hover { background-color: #fcfcfc; }
     border-radius: 20px;
     width: 100%;
     max-width: 450px;
+    max-height: 90vh;
+    overflow-y: auto;
     box-shadow: 0 15px 35px rgba(0,0,0,0.1);
     border: 1px solid rgba(212, 175, 55, 0.2);
 }

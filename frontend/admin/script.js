@@ -54,6 +54,8 @@ async function carregarConvidados() {
             listaGlobalConvidados = dados.convidado || dados.convidados || [];
             atualizarCards(listaGlobalConvidados);
             renderizarTabela(listaGlobalConvidados);
+
+            verificarAlertaPendentes(listaGlobalConvidados);
         } else {
             document.getElementById('tabelaConvidados').innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Erro ao carregar dados.</td></tr>';
         }
@@ -62,7 +64,7 @@ async function carregarConvidados() {
         document.getElementById('tabelaConvidados').innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Erro de conexão com a API.</td></tr>';
     }
 
-    // Cole esta função no script.js
+    // ==================== ALERTA DE PENDENTES PRÓXIMO AO CASAMENTO ====================
     function verificarAlertaPendentes(convidados) {
         const dataEventoSalva = localStorage.getItem('data_evento');
         if (!dataEventoSalva) return;
@@ -98,8 +100,6 @@ async function carregarConvidados() {
             `;
         }
     }
-
-    verificarAlertaPendentes(listaGlobalConvidados);
 }
 
 function atualizarCards(convidados) {
@@ -396,24 +396,40 @@ document.getElementById('formPerfil').addEventListener('submit', async function(
         senha: senhaNova || null 
     };
 
-    const resposta = await fetch(`${API_URL}/admin/editar`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify(payload)
-    });
+    try {
+        const resposta = await fetch(`${API_URL}/admin/editar`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify(payload)
+        });
 
-    const dados = await resposta.json();
+        const dados = await resposta.json();
 
-    if (resposta.ok && dados.status === 'sucesso') {
-        // Atualiza os dados no localStorage para o relógio da dashboard atualizar
-        localStorage.setItem('nome_evento', payload.nome_noivos);
-        localStorage.setItem('data_evento', payload.data_evento);
-        
-        fecharModalPerfil();
-        alert("Perfil atualizado com sucesso!");
-        window.location.reload(); // Recarrega a página para atualizar o título e o relógio
-    } else {
-        alert(`Erro: ${dados.mensagem || dados.detail || 'Falha ao salvar'}`);
+        if (resposta.ok && dados.status === 'sucesso') {
+            localStorage.setItem('nome_evento', payload.nome_noivos);
+            localStorage.setItem('data_evento', payload.data_evento);
+            
+            fecharModalPerfil();
+            alert("Perfil atualizado com sucesso!");
+            window.location.reload(); 
+        } else {
+            // Tratamento inteligente para evitar [object Object]
+            let mensagemErro = "Falha ao salvar.";
+            if (dados.detail) {
+                if (Array.isArray(dados.detail)) {
+                    mensagemErro = dados.detail.map(d => d.msg || JSON.stringify(d)).join(', ');
+                } else if (typeof dados.detail === 'object') {
+                    mensagemErro = JSON.stringify(dados.detail);
+                } else {
+                    mensagemErro = dados.detail;
+                }
+            } else if (dados.mensagem) {
+                mensagemErro = dados.mensagem;
+            }
+            alert(`Erro: ${mensagemErro}`);
+        }
+    } catch (erro) {
+        alert("Erro de conexão com o servidor.");
     }
 });
 
@@ -470,3 +486,32 @@ function abrirModalExcluirConta() {
     })
     .catch(() => alert("Erro de conexão com o servidor."));
 }
+
+
+// Função para aplicar máscara de telefone em tempo real e bloquear letras
+function aplicarMascaraTelefone(inputId) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+
+    input.addEventListener('input', function (e) {
+        let valor = e.target.value.replace(/\D/g, ''); // Remove tudo que não é número
+        if (valor.length > 11) valor = valor.substring(0, 11); // Trava em 11 dígitos
+
+        // Formata: (XX) XXXXX-XXXX ou (XX) XXXX-XXXX
+        if (valor.length > 6) {
+            valor = `(${valor.substring(0, 2)}) ${valor.substring(2, 7)}-${valor.substring(7)}`;
+        } else if (valor.length > 2) {
+            valor = `(${valor.substring(0, 2)}) ${valor.substring(2)}`;
+        } else if (valor.length > 0) {
+            valor = `(${valor}`;
+        }
+        e.target.value = valor;
+    });
+}
+
+// Aplica automaticamente nos campos de celular existentes nas telas
+window.addEventListener('DOMContentLoaded', () => {
+    aplicarMascaraTelefone('celular');       // Modal de convidado
+    aplicarMascaraTelefone('cadCelular');    // Tela de cadastro
+    aplicarMascaraTelefone('perfilCelular'); // Modal de perfil
+});
