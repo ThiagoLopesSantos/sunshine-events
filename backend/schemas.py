@@ -43,8 +43,9 @@ class ConfirmarRsvpSchema(BaseModel):
     acompanhantes: Optional[List[AcompanhanteSchema]] = []
 
 class EditarAdminSchema(BaseModel):
-    nome: str
+    nome_noivos: str
+    email_noivo: str
+    email_noiva: str
     celular: str
-    nome_evento: str
     data_evento: str
-    senha: Optional[str] = None  # Opcional: se vier vazio, não altera a senha
+    senha: Optional[str] = None

@@ -240,6 +240,9 @@ def obter_perfil(admin_logado: dict = Depends(obter_admin_atual), db: Session = 
 def editar_admin(dados: EditarAdminSchema, admin_logado: dict = Depends(obter_admin_atual), db: Session = Depends(obter_conexao)):
     admin = db.query(AdministradorModel).filter(AdministradorModel.id == admin_logado["id"]).first()
     
+    if not admin:
+        return {"status": "erro", "mensagem": "Administrador não encontrado."}
+
     admin.nome_noivos = dados.nome_noivos
     admin.celular = dados.celular
     admin.data_evento = dados.data_evento

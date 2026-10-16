@@ -381,9 +381,11 @@ document.getElementById('formPerfil').addEventListener('submit', async function(
 
     const senhaNova = document.getElementById('perfilSenha').value;
     const senhaConfirma = document.getElementById('perfilConfirmaSenha').value;
+    const msgBox = document.getElementById('msgPerfil');
 
     if (senhaNova && senhaNova !== senhaConfirma) {
-        alert("A nova senha e a confirmação não coincidem.");
+        msgBox.style.color = '#ff4757';
+        msgBox.innerText = "A nova senha e a confirmação não coincidem.";
         return;
     }
     
@@ -395,6 +397,9 @@ document.getElementById('formPerfil').addEventListener('submit', async function(
         data_evento: document.getElementById('perfilDataEvento').value,
         senha: senhaNova || null 
     };
+
+    msgBox.style.color = '#333';
+    msgBox.innerText = "Salvando alterações...";
 
     try {
         const resposta = await fetch(`${API_URL}/admin/editar`, {
@@ -409,11 +414,14 @@ document.getElementById('formPerfil').addEventListener('submit', async function(
             localStorage.setItem('nome_evento', payload.nome_noivos);
             localStorage.setItem('data_evento', payload.data_evento);
             
-            fecharModalPerfil();
-            alert("Perfil atualizado com sucesso!");
-            window.location.reload(); 
+            msgBox.style.color = '#2ed573';
+            msgBox.innerText = "Perfil atualizado com sucesso! Recarregando...";
+            
+            setTimeout(() => {
+                fecharModalPerfil();
+                window.location.reload(); 
+            }, 1500);
         } else {
-            // Tratamento inteligente para evitar [object Object]
             let mensagemErro = "Falha ao salvar.";
             if (dados.detail) {
                 if (Array.isArray(dados.detail)) {
@@ -426,10 +434,12 @@ document.getElementById('formPerfil').addEventListener('submit', async function(
             } else if (dados.mensagem) {
                 mensagemErro = dados.mensagem;
             }
-            alert(`Erro: ${mensagemErro}`);
+            msgBox.style.color = '#ff4757';
+            msgBox.innerText = `Erro: ${mensagemErro}`;
         }
     } catch (erro) {
-        alert("Erro de conexão com o servidor.");
+        msgBox.style.color = '#ff4757';
+        msgBox.innerText = "Erro de conexão com o servidor.";
     }
 });
 
