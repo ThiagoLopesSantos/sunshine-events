@@ -77,27 +77,19 @@ async function carregarConvidados() {
         const diasRestantes = Math.ceil(diferencaTempo / (1000 * 3600 * 24));
 
         const pendentes = convidados.filter(c => c.status_presenca.toLowerCase() === 'pendente');
+        const containerAlerta = document.getElementById('alertaPendentesDinamico');
+        const textoAlerta = document.getElementById('textoAlertaPendentes');
+
+        if (!containerAlerta || !textoAlerta) return;
 
         // Se faltarem 7 dias ou menos e houver pendentes
         if (diasRestantes <= 7 && diasRestantes > 0 && pendentes.length > 0) {
-            let containerAlerta = document.getElementById('alertaPendentesDinamico');
-            
-            // Se o alerta ainda não existe na tela, cria ele logo abaixo do header
-            if (!containerAlerta) {
-                containerAlerta = document.createElement('div');
-                containerAlerta.id = 'alertaPendentesDinamico';
-                containerAlerta.style.cssText = "background: #fff3cd; border-left: 5px solid #ffc107; padding: 15px; margin: 20px 0; border-radius: 4px; color: #856404; display: flex; justify-content: space-between; align-items: center;";
-                
-                const dashboardContainer = document.querySelector('.dashboard-container');
-                const header = document.querySelector('.header');
-                if (dashboardContainer && header) {
-                    dashboardContainer.insertBefore(containerAlerta, header.nextSibling);
-                }
-            }
-
-            containerAlerta.innerHTML = `
-                <span>⚠️ <strong>Atenção:</strong> Faltam apenas ${diasRestantes} dias para o grande dia e você tem <strong>${pendentes.length} convidado(s) pendente(s)</strong>! Use o botão "Lembrete" na tabela para avisá-los no WhatsApp.</span>
-            `;
+            textoAlerta.innerHTML = `⚠️ <strong>Atenção:</strong> Faltam apenas ${diasRestantes} dias para o grande dia e você tem <strong>${pendentes.length} convidado(s) pendente(s)</strong>! Use o botão "Lembrete" na tabela para avisá-los no WhatsApp.`;
+            containerAlerta.classList.remove('escondido'); // Mostra o alerta
+            containerAlerta.style.display = 'flex';
+        } else {
+            containerAlerta.classList.add('escondido'); // Esconde se não estiver na regra
+            containerAlerta.style.display = 'none';
         }
     }
 }
