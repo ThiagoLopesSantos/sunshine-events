@@ -149,16 +149,23 @@ function renderizarTabela(convidados) {
         else if (c.categoria === 'Pais/Familia') tagClass = 'tag-familia';
         else if (c.categoria === 'VIP') tagClass = 'tag-vip';
 
-        // Gera o link personalizado com o ID do admin logado
-        const adminId = localStorage.getItem('admin_id') || 1;
-        const origem = window.location.origin;
-        const caminhoPasta = window.location.pathname.substring(0, window.location.pathname.indexOf('/admin/'));
-        const linkConvite = `${origem}${caminhoPasta}/convidados/convite.html?evento=${adminId}`;
+        // // Gera o link personalizado com o ID do admin logado
+        // const adminId = localStorage.getItem('admin_id') || 1;
+        // const origem = window.location.origin;
+        // const caminhoPasta = window.location.pathname.substring(0, window.location.pathname.indexOf('/admin/'));
+        // const linkConvite = `${origem}${caminhoPasta}/convidados/convite.html?evento=${adminId}`;
 
-        // Textos formatados para o WhatsApp
-        const msgConvite = encodeURIComponent(`Olá ${c.nome_completo}! É uma alegria ter você conosco. Por favor, acesse o link abaixo para confirmar sua presença no nosso evento: ${linkConvite}`);
-        const msgLembrete = encodeURIComponent(`Olá ${c.nome_completo}, passando para lembrar de confirmar sua presença no nosso evento pelo link: ${linkConvite}. Contamos com você!`);
+        // // Textos formatados para o WhatsApp
+        // const msgConvite = encodeURIComponent(`Olá ${c.nome_completo}! É uma alegria ter você conosco. Por favor, acesse o link abaixo para confirmar sua presença no nosso evento: ${linkConvite}`);
+        // const msgLembrete = encodeURIComponent(`Olá ${c.nome_completo}, passando para lembrar de confirmar sua presença no nosso evento pelo link: ${linkConvite}. Contamos com você!`);
+        
+        // Link oficial do site do casamento no Vercel 
+        const linkSiteCasamento = "https://casamento-jessica-e-thiago.vercel.app/";
 
+        // Textos formatados para o WhatsApp usando o link oficial do site
+        const msgConvite = encodeURIComponent(`Olá ${c.nome_completo}! É uma alegria ter você conosco. Visite o nosso site do casamento para ver todos os detalhes e confirmar sua presença: ${linkSiteCasamento}`);
+        const msgLembrete = encodeURIComponent(`Olá ${c.nome_completo}, passando para lembrar de confirmar sua presença no nosso casamento através do nosso site: ${linkSiteCasamento}. Contamos com você!`);
+        
         tr.innerHTML = `
             <td><strong>${c.nome_completo}</strong></td>
             <td>${c.celular}</td>
