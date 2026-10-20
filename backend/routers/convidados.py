@@ -50,6 +50,10 @@ def confirmar_presenca(convidado_id: int, dados: ConfirmarRsvpSchema, db: Sessio
 
     convidado.status_presenca = dados.status_presenca
     
+    # Atualiza o nome completo caso o convidado tenha preenchido os novos inputs
+    if dados.nome_completo:
+        convidado.nome_completo = dados.nome_completo
+
     # Remove acompanhantes antigos
     db.query(AcompanhanteModel).filter(AcompanhanteModel.convidado_id == convidado_id).delete()
 

@@ -4,9 +4,8 @@ const API_URL = 'https://sunshine-events-api.onrender.com';
 let convidadoAtual = null;
 
 // ==================== CAPTURA DO ID DO EVENTO NA URL ====================
-// Exemplo de link que o convidado vai abrir: convite.html?evento=1
 const urlParams = new URLSearchParams(window.location.search);
-const adminIdEvento = urlParams.get('evento') || 1; // Padrão 1 caso venha sem parâmetro
+const adminIdEvento = urlParams.get('evento') || 1; 
 
 // Função para buscar e exibir o nome do evento e verificar o prazo de RSVP
 async function carregarInfoEvento() {
@@ -17,14 +16,12 @@ async function carregarInfoEvento() {
         if (resposta.ok && dados.status === 'sucesso') {
             document.getElementById('tituloNomeEvento').innerText = `Casamento de ${dados.nome_evento}`;
             
-            // --- NOVA REGRA: VALIDAÇÃO DE PRAZO DO EVENTO ---
             if (dados.data_evento) {
                 const hoje = new Date();
-                hoje.setHours(0, 0, 0, 0); // Zera as horas para comparar apenas os dias
+                hoje.setHours(0, 0, 0, 0); 
                 
                 const dataEvento = new Date(`${dados.data_evento}T00:00:00`);
                 
-                // Se a data de hoje for maior que a data do evento, o prazo acabou!
                 if (hoje > dataEvento) {
                     const formBusca = document.getElementById('formBusca');
                     if (formBusca) {
@@ -44,7 +41,6 @@ async function carregarInfoEvento() {
     }
 }
 
-// Executa assim que a página abre
 carregarInfoEvento();
 
 // ==================== 1. BUSCAR CONVIDADO POR CELULAR ====================
@@ -69,12 +65,12 @@ document.getElementById('formBusca').addEventListener('submit', async function(e
         if (resposta.ok && dados.convidado) {
             convidadoAtual = dados.convidado;
             
+            // Apenas para saudação de boas-vindas
             document.getElementById('spanNome').innerText = convidadoAtual.nome_completo;
             document.getElementById('spanLimite').innerText = convidadoAtual.limite_acompanhantes;
 
-            if (convidadoAtual.limite_acompanhantes > 0) {
-                document.getElementById('secaoAcompanhantes').classList.remove('escondido');
-            }
+            // Renderiza automaticamente os campos de acompanhantes de acordo com o limite
+            renderizarCamposAcompanhantes(convidadoAtual.limite_acompanhantes);
 
             document.getElementById('etapaBusca').classList.add('escondido');
             document.getElementById('etapaConvite').classList.remove('escondido');
@@ -88,31 +84,34 @@ document.getElementById('formBusca').addEventListener('submit', async function(e
     }
 });
 
-// ==================== 2. GERENCIAR ACOMPANHANTES ====================
-function adicionarCampoAcompanhante() {
+// ==================== 2. GERENCIAR ACOMPANHANTES AUTOMÁTICOS ====================
+function renderizarCamposAcompanhantes(limite) {
     const container = document.getElementById('listaAcompanhantesCampos');
-    const totalAtual = container.children.length;
+    container.innerHTML = '';
 
-    if (totalAtual >= convidadoAtual.limite_acompanhantes) {
-        alert(`O seu limite é de ${convidadoAtual.limite_acompanhantes} acompanhante(s).`);
-        return;
+    if (limite > 0) {
+        document.getElementById('secaoAcompanhantes').classList.remove('escondido');
+        
+        for (let i = 0; i < limite; i++) {
+            const div = document.createElement('div');
+            div.className = 'acompanhante-item';
+            div.style.cssText = "margin-bottom: 15px; background: #fdfdfd; padding: 10px; border: 1px solid #eee; border-radius: 6px;";
+            div.innerHTML = `
+                <label style="font-size: 13px; color: #555; display: block; margin-bottom: 5px;">Acompanhante ${i + 1}:</label>
+                <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+                    <input type="text" placeholder="Nome" class="acomp-nome" required style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    <input type="text" placeholder="Sobrenome" class="acomp-sobrenome" required style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="number" placeholder="Idade" class="acomp-idade" min="0" max="120" required style="width: 100px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" oninput="verificarIdadeCrianca(this)">
+                    <span class="aviso-crianca" style="font-size: 12px; color: #e67e22;"></span>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+    } else {
+        document.getElementById('secaoAcompanhantes').classList.add('escondido');
     }
-
-    const div = document.createElement('div');
-    div.className = 'acompanhante-item';
-    div.innerHTML = `
-        <div class="acompanhante-inputs">
-            <input type="text" placeholder="Nome completo" class="acomp-nome" required style="flex: 2;">
-            <input type="number" placeholder="Idade" class="acomp-idade" min="0" max="120" required style="flex: 1;" oninput="verificarIdadeCrianca(this)">
-        </div>
-        <div class="aviso-crianca"></div>
-        <button type="button" class="btn-remover" onclick="removerCampo(this)">Remover</button>
-    `;
-    container.appendChild(div);
-}
-
-function removerCampo(botao) {
-    botao.parentElement.remove();
 }
 
 function verificarIdadeCrianca(input) {
@@ -129,24 +128,43 @@ function verificarIdadeCrianca(input) {
 // ==================== 3. ENVIAR RESPOSTA (O RSVP FINAL) ====================
 async function enviarResposta(status) {
     const msgProcessando = document.getElementById('msgProcessando');
+    
+    // Coleta o nome e sobrenome do titular preenchido pelo convidado
+    const nomeTitular = document.getElementById('titularNome').value.trim();
+    const sobrenomeTitular = document.getElementById('titularSobrenome').value.trim();
+
+    if (status === 'confirmado' && (!nomeTitular || !sobrenomeTitular)) {
+        alert("Por favor, preencha o seu Nome e Sobrenome.");
+        return;
+    }
+
     const acompanhantes = [];
     const itens = document.querySelectorAll('.acompanhante-item');
     
     if (status === 'confirmado') {
         for (let item of itens) {
-            const nome = item.querySelector('.acomp-nome').value.trim();
+            const nomeAcomp = item.querySelector('.acomp-nome').value.trim();
+            const sobrenomeAcomp = item.querySelector('.acomp-sobrenome').value.trim();
             const idade = parseInt(item.querySelector('.acomp-idade').value);
 
-            if (!nome || isNaN(idade)) {
-                alert("Por favor, preencha o nome e a idade de todos os acompanhantes que você adicionou.");
+            if (!nomeAcomp || !sobrenomeAcomp || isNaN(idade)) {
+                alert("Por favor, preencha o nome, sobrenome e a idade de todos os acompanhantes.");
                 return;
             }
-            acompanhantes.push({ nome: nome, idade: idade });
+            // Junta nome + sobrenome para manter compatibilidade com o formato que o backend espera
+            acompanhantes.push({ 
+                nome: `${nomeAcomp} ${sobrenomeAcomp}`, 
+                idade: idade 
+            });
         }
     }
 
+    // Se o titular preencheu nome e sobrenome separados, unimos para enviar como o novo nome oficial na base
+    const nomeCompletoOficial = status === 'confirmado' ? `${nomeTitular} ${sobrenomeTitular}` : convidadoAtual.nome_completo;
+
     const payload = {
         status_presenca: status,
+        nome_completo: nomeCompletoOficial, // Atualiza para o nome completo preenchido por ele
         acompanhantes: acompanhantes
     };
 
@@ -195,10 +213,9 @@ function exibirTelaConclusao(status) {
         texto.innerText = 'Sentiremos muito a sua falta, mas agradecemos por nos avisar. Obrigado!';
     }
 
-    // Dá tempo suficiente para a pessoa ler (ex: 6 segundos) e recarrega a página para o próximo
     setTimeout(() => {
         window.location.reload(); 
-    }, 6000); // 6000 milissegundos = 6 segundos
+    }, 6000);
 }
 
 // Função para aplicar máscara de telefone em tempo real e bloquear letras
@@ -207,10 +224,9 @@ function aplicarMascaraTelefone(inputId) {
     if (!input) return;
 
     input.addEventListener('input', function (e) {
-        let valor = e.target.value.replace(/\D/g, ''); // Remove tudo que não é número
-        if (valor.length > 11) valor = valor.substring(0, 11); // Trava em 11 dígitos
+        let valor = e.target.value.replace(/\D/g, ''); 
+        if (valor.length > 11) valor = valor.substring(0, 11); 
 
-        // Formata: (XX) XXXXX-XXXX ou (XX) XXXX-XXXX
         if (valor.length > 6) {
             valor = `(${valor.substring(0, 2)}) ${valor.substring(2, 7)}-${valor.substring(7)}`;
         } else if (valor.length > 2) {
@@ -222,9 +238,8 @@ function aplicarMascaraTelefone(inputId) {
     });
 }
 
-// Aplica automaticamente nos campos de celular existentes nas telas
 window.addEventListener('DOMContentLoaded', () => {
-    aplicarMascaraTelefone('celular');       // Modal de convidado
-    aplicarMascaraTelefone('cadCelular');    // Tela de cadastro
-    aplicarMascaraTelefone('perfilCelular'); // Modal de perfil
+    aplicarMascaraTelefone('celular');       
+    aplicarMascaraTelefone('cadCelular');    
+    aplicarMascaraTelefone('perfilCelular'); 
 });

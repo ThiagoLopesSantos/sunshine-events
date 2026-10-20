@@ -39,26 +39,31 @@
         <!-- ETAPA 2: DADOS E CONFIRMAÇÃO -->
         <div id="etapaConvite" class="escondido">
             <h2>Olá, <span id="spanNome"></span>!</h2>
-            <p>É uma alegria ter você conosco neste momento especial. Por favor, confirme sua presença abaixo.</p>
+            <p>É uma alegria ter você conosco neste momento especial. Por favor, preencha seu nome completo e confirme sua presença abaixo.</p>
             
-            <div class="limiteAcompanhante">
+            <div class="limiteAcompanhante" style="margin-bottom: 20px;">
                 <strong>Seu limite de acompanhantes:</strong> <span id="spanLimite">0</span> pessoa(s)
             </div>
 
             <form id="formConfirmacao">
-                <!-- SEÇÃO DE ACOMPANHANTES -->
-                <div id="secaoAcompanhantes" class="escondido">
-                    <div class="acompanahnte-container">
-                        <label>Seus Acompanhantes:</label>
-                        <button type="button" id="btnAdicionarAcomp" onclick="adicionarCampoAcompanhante()">+ Adicionar</button>
+                <!-- DADOS DO TITULAR -->
+                <div class="form-group" style="text-align: left; margin-bottom: 15px;">
+                    <label style="font-weight: bold; display: block; margin-bottom: 5px;">Seu Nome e Sobrenome:</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="titularNome" placeholder="Nome" required style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                        <input type="text" id="titularSobrenome" placeholder="Sobrenome" required style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
                     </div>
-                    
+                </div>
+
+                <!-- SEÇÃO DE ACOMPANHANTES GERADA AUTOMATICAMENTE -->
+                <div id="secaoAcompanhantes" class="escondido" style="text-align: left; margin-top: 20px;">
+                    <label style="font-weight: bold; display: block; margin-bottom: 10px;">Nome e Sobrenome dos seus Acompanhantes:</label>
                     <div id="listaAcompanhantesCampos"></div>
                     <hr style="border: 0; border-top: 1px solid #ddd; margin: 20px 0;">
                 </div>
 
-                <div class="form-group">
-                    <label style="text-align: center;">Você irá ao evento?</label>
+                <div class="form-group" style="margin-top: 25px;">
+                    <label style="text-align: center; display: block; margin-bottom: 15px; font-weight: bold;">Você irá ao evento?</label>
                     <button type="button" class="btn-confirmar" onclick="enviarResposta('confirmado')">SIM, Eu vou!</button>
                     <button type="button" class="btn-recusar" onclick="enviarResposta('recusado')">NÃO poderei ir</button>
                 </div>
