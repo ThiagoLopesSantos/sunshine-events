@@ -316,4 +316,9 @@ footer {
         width: 100%;
         padding: 14px;
     }
+
+    .acompanhante-item { 
+        flex-direction: column;
+    }
+
 }
