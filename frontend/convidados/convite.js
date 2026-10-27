@@ -98,7 +98,7 @@ function renderizarCamposAcompanhantes(limite) {
             div.style.cssText = "margin-bottom: 15px; background: #fdfdfd; padding: 10px; border: 1px solid #eee; border-radius: 6px;";
             div.innerHTML = `
                 <label style="font-size: 13px; color: #555; display: block; margin-bottom: 5px;">Acompanhante ${i + 1}:</label>
-                <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 8px;">
                     <input type="text" placeholder="Nome" class="acomp-nome" required style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
                     <input type="text" placeholder="Sobrenome" class="acomp-sobrenome" required style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
                 </div>
